@@ -1,0 +1,66 @@
+# ============================================================
+#  Site configuration — Kumar Saurabh
+#  Built for GitHub Pages (classic Jekyll build)
+# ============================================================
+
+title: Kumar Saurabh
+tagline: "AI & Program Leadership"
+description: >-
+  Kumar Saurabh — PMP-certified program leader turning ambitious AI ideas into
+  shipped products. Computer vision, Generative & Agentic AI, and data-driven
+  program delivery.
+author: Kumar Saurabh
+
+# IMPORTANT: for a GitHub Pages user site the repo MUST be named exactly
+# kumsaurabh.github.io (i.e. match the GitHub username "kumsaurabh").
+# For a project repo instead, set baseurl: "/repo-name".
+url: "https://kumsaurabh.github.io"
+baseurl: ""
+
+# ---- Contact / identity ----
+email: ksaurabh2468@gmail.com
+location: "Pune, India"
+
+# ---- Social links (edit any of these freely) ----
+social:
+  github: https://github.com/ksaurabh2468
+  linkedin: https://www.linkedin.com/in/kumsaurabh
+  email: ksaurabh2468@gmail.com
+  # twitter: https://x.com/yourhandle        # uncomment + set to show an X/Twitter icon
+  # instagram: https://instagram.com/...      # uncomment to show Instagram
+  # resume: /assets/Kumar_Saurabh_Resume.pdf  # drop a PDF in assets/ and uncomment
+
+# ---- Primary navigation (label + anchor/path) ----
+nav:
+  - { label: "Home",      url: "/#top" }
+  - { label: "About",     url: "/#about" }
+  - { label: "Expertise", url: "/#expertise" }
+  - { label: "Work",      url: "/#work" }
+  - { label: "Blog",      url: "/blog/" }
+
+# ---- Build settings ----
+markdown: kramdown
+permalink: /blog/:year/:month/:title/
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+collections:
+  portfolio:
+    output: true
+    permalink: /work/:name/
+
+defaults:
+  - scope: { path: "", type: "pages" }
+    values: { layout: "default" }
+  - scope: { path: "_posts", type: "posts" }
+    values: { layout: "post" }
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
+  - .gitignore
+  - node_modules

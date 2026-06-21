@@ -1,0 +1,25 @@
+<header class="site-header">
+  <nav class="nav wrap" aria-label="Primary">
+    <a href="{{ '/#top' | relative_url }}" class="brand">
+      <span class="mark"><span>K</span></span>
+      <span>Kumar Saurabh</span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links" id="nav-links">
+      {% for item in site.nav %}
+        <li><a href="{{ item.url | relative_url }}">{{ item.label }}</a></li>
+      {% endfor %}
+      <li class="nav-cta">
+        {% if site.social.resume %}
+          <a href="{{ site.social.resume | relative_url }}" class="btn btn--primary" target="_blank" rel="noopener">Résumé</a>
+        {% else %}
+          <a href="{{ '/#contact' | relative_url }}" class="btn btn--primary">Get in touch</a>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
+</header>

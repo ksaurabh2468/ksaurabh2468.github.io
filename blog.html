@@ -1,0 +1,40 @@
+---
+layout: default
+title: Blog
+permalink: /blog/
+---
+
+<section class="section" style="padding-top: calc(76px + clamp(2.5rem, 7vw, 5rem))">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Writing</span>
+      <h2 class="section-title">Notes on AI, delivery &amp; building.</h2>
+      <p class="section-lead">Lessons from leading AI programs — the strategy, the craft and the messy middle.</p>
+    </div>
+
+    {% if site.posts.size > 0 %}
+      <div class="blog-grid">
+        {% for post in site.posts %}
+          <article class="post-card" data-reveal data-delay="{{ forloop.index0 | modulo: 3 | plus: 1 }}">
+            <a href="{{ post.url | relative_url }}" class="post-thumb" aria-hidden="true" tabindex="-1">
+              <span class="glyph">{{ post.title | slice: 0 }}</span>
+            </a>
+            <div class="body">
+              <div class="post-meta">
+                <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+                {% if post.read_time %}<span>· {{ post.read_time }}</span>{% endif %}
+              </div>
+              <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+              <p class="excerpt">{{ post.excerpt | strip_html | truncatewords: 24 }}</p>
+              <a class="read-more" href="{{ post.url | relative_url }}">Read <span class="arrow">→</span></a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="blog-empty" data-reveal>
+        <p>No posts yet — the first article is on its way. ✦</p>
+      </div>
+    {% endif %}
+  </div>
+</section>

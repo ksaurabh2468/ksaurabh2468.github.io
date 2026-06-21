@@ -1,0 +1,35 @@
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="{{ '/#top' | relative_url }}" class="brand">
+          <span class="mark"><span>K</span></span>
+          <span>Kumar Saurabh</span>
+        </a>
+        <p>{{ site.tagline }} — building intelligent products and leading the programs that ship them.</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Explore</h5>
+          {% for item in site.nav %}
+            <a href="{{ item.url | relative_url }}">{{ item.label }}</a>
+          {% endfor %}
+        </div>
+        <div class="footer-col">
+          <h5>Connect</h5>
+          <a href="{{ site.social.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="{{ site.social.github }}" target="_blank" rel="noopener">GitHub</a>
+          <a href="mailto:{{ site.social.email }}">Email</a>
+          {% if site.social.twitter %}<a href="{{ site.social.twitter }}" target="_blank" rel="noopener">X / Twitter</a>{% endif %}
+          {% if site.social.instagram %}<a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Kumar Saurabh. All rights reserved.</span>
+      <span>Crafted with <span class="heart">◆</span> using Jekyll &amp; GitHub Pages.</span>
+    </div>
+  </div>
+</footer>

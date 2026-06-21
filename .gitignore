@@ -1,0 +1,17 @@
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Ruby / Bundler
+vendor/
+.bundle/
+Gemfile.lock
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
