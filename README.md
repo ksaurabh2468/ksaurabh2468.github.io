@@ -3,7 +3,7 @@
 A custom dark, cinematic personal website + blog built with **Jekyll** and hosted free on
 **GitHub Pages**. No theme — the design, animations and layout are all bespoke.
 
-Live (after deploy): **https://kumsaurabh.github.io**
+Live (after deploy): **https://ksaurabh2468.github.io**
 
 ---
 
@@ -11,17 +11,17 @@ Live (after deploy): **https://kumsaurabh.github.io**
 
 GitHub Pages serves a *user site* from a repo named exactly `<username>.github.io`.
 
-1. Sign in to GitHub as **`kumsaurabh`** and **create a repo** named exactly
-   **`kumsaurabh.github.io`** (Public, no README).
+1. Sign in to GitHub as **`ksaurabh2468`** and **create a repo** named exactly
+   **`ksaurabh2468.github.io`** (Public, no README).
 2. **Push this folder** to it (it's already a git repo — just add the remote):
    ```bash
-   cd D:/projects/kumsaurabh.github.io
-   git remote add origin https://github.com/kumsaurabh/kumsaurabh.github.io.git
+   cd D:/projects/ksaurabh2468.github.io
+   git remote add origin https://github.com/ksaurabh2468/ksaurabh2468.github.io.git
    git push -u origin main
    ```
 3. On GitHub: **Settings → Pages → Build and deployment → Source: "Deploy from a branch"**,
    pick **`main`** / **`/ (root)`**, Save.
-4. Wait ~1 minute. Your site is live at **https://kumsaurabh.github.io**.
+4. Wait ~1 minute. Your site is live at **https://ksaurabh2468.github.io**.
 
 That's it — every future `git push` re-deploys automatically.
 
@@ -69,7 +69,7 @@ then uncomment the `resume:` line in `_config.yml` — a "Résumé" button appea
 Requires Ruby + Bundler.
 
 ```bash
-cd D:/projects/kumsaurabh.github.io
+cd D:/projects/ksaurabh2468.github.io
 bundle install
 bundle exec jekyll serve --livereload
 # open http://localhost:4000
