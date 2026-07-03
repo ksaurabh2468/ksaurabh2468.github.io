@@ -273,6 +273,215 @@
     });
   }
 
+  /* ---------- Preloader (once per session) ---------- */
+  const pre = $(".preloader");
+  const revisit = document.documentElement.classList.contains("revisit");
+  if (pre && !revisit && !reduced) {
+    document.body.classList.add("is-loading");
+    const num = $(".pre-count", pre);
+    const t0 = performance.now(), dur = 950;
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      pre.classList.add("done");
+      document.body.classList.remove("is-loading");
+      try { sessionStorage.setItem("ks-visited", "1"); } catch (e) {}
+      setTimeout(() => pre.remove(), 900);
+    };
+    const step = (now) => {
+      const p = Math.min((now - t0) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      if (num) num.textContent = Math.round(eased * 100);
+      if (p < 1) requestAnimationFrame(step); else setTimeout(finish, 120);
+    };
+    requestAnimationFrame(step);
+    setTimeout(finish, 2600); // safety net
+  } else if (pre) {
+    pre.remove();
+  }
+
+  /* ---------- Split section titles into masked words ---------- */
+  if (!reduced) {
+    $$(".section-title").forEach((t) => {
+      const text = t.textContent.trim();
+      if (!text) return;
+      t.setAttribute("aria-label", text);
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      t.innerHTML = text
+        .split(/\s+/)
+        .map((w, i) => '<span class="w" aria-hidden="true"><span class="wi" style="--i:' + i + '">' + esc(w) + "</span></span>")
+        .join(" ");
+    });
+  }
+
+  /* ---------- Rotating focus word (hero) ---------- */
+  const rotator = $(".rotator");
+  if (rotator && !reduced) {
+    let words = [];
+    try { words = JSON.parse(rotator.dataset.words || "[]"); } catch (e) {}
+    const rw = $(".rw", rotator);
+    if (rw && words.length > 1) {
+      let i = 0;
+      setInterval(() => {
+        rw.classList.add("out");
+        setTimeout(() => {
+          i = (i + 1) % words.length;
+          rw.textContent = words[i];
+          rw.classList.remove("out");
+          // restart the enter animation
+          void rw.offsetWidth;
+        }, 380);
+      }, 2600);
+    }
+  }
+
+  /* ---------- Hero spotlight follows cursor ---------- */
+  const heroSpot = $(".hero-spot");
+  if (heroSpot && !isTouch && !reduced) {
+    const hero = $(".hero");
+    hero.addEventListener("pointermove", (e) => {
+      const r = hero.getBoundingClientRect();
+      heroSpot.style.setProperty("--sx", ((e.clientX - r.left) / r.width) * 100 + "%");
+      heroSpot.style.setProperty("--sy", ((e.clientY - r.top) / r.height) * 100 + "%");
+    }, { passive: true });
+  }
+
+  /* ---------- Cursor dot (instant partner to the lagging glow) ---------- */
+  if (!isTouch && !reduced) {
+    const dot = document.createElement("div");
+    dot.className = "cursor-dot";
+    document.body.appendChild(dot);
+    window.addEventListener("pointermove", (e) => {
+      dot.style.transform = "translate(" + e.clientX + "px," + e.clientY + "px) translate(-50%,-50%)";
+    }, { passive: true });
+  }
+
+  /* ---------- Copy email ---------- */
+  $$(".copy-email").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const email = btn.dataset.copy || "";
+      const done = () => {
+        btn.classList.add("copied");
+        setTimeout(() => btn.classList.remove("copied"), 2200);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(done).catch(done);
+      } else { done(); }
+    });
+  });
+
+  /* ---------- Back to top (with progress ring) ---------- */
+  const toTop = $(".to-top");
+  if (toTop) {
+    const ring = $(".ring-fg", toTop);
+    const CIRC = 151; // 2πr for r=24 at stroke inset
+    const onScroll = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const p = max > 0 ? h.scrollTop / max : 0;
+      toTop.classList.toggle("show", h.scrollTop > 640);
+      if (ring) ring.style.strokeDashoffset = String(CIRC * (1 - p));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }));
+  }
+
+  /* ---------- Live clock (Pune / IST) ---------- */
+  const clock = $("[data-clock]");
+  if (clock) {
+    const fmt = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZone: "Asia/Kolkata" });
+    const tickClock = () => { clock.textContent = "Pune · " + fmt.format(new Date()) + " IST"; };
+    tickClock();
+    setInterval(tickClock, 1000);
+  }
+
+  /* ---------- Command palette (Ctrl/Cmd + K) ---------- */
+  const cmdk = $("#cmdk");
+  if (cmdk) {
+    const body = document.body;
+    const email = body.dataset.email || "";
+    const onHome = !!document.getElementById("about");
+    const go = (hash) => (onHome ? hash : "/" + hash); // from blog pages, jump home first
+    const ICONS = {
+      section: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4 8 20M16 4l-2 16M4 9h17M3 15h17"/></svg>',
+      page: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+      ext: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>',
+      copy: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    };
+    const items = [
+      { label: "Home", k: "Go", icon: ICONS.section, run: () => (location.href = go("#top")) },
+      { label: "About", k: "Go", icon: ICONS.section, run: () => (location.href = go("#about")) },
+      { label: "Expertise", k: "Go", icon: ICONS.section, run: () => (location.href = go("#expertise")) },
+      { label: "How I deliver", k: "Go", icon: ICONS.section, run: () => (location.href = go("#process")) },
+      { label: "Selected work", k: "Go", icon: ICONS.section, run: () => (location.href = go("#work")) },
+      { label: "Awards & credentials", k: "Go", icon: ICONS.section, run: () => (location.href = go("#achievements")) },
+      { label: "Contact", k: "Go", icon: ICONS.section, run: () => (location.href = go("#contact")) },
+      { label: "Blog", k: "Page", icon: ICONS.page, run: () => (location.href = "/blog/") },
+      { label: "Copy email address", k: "Action", icon: ICONS.copy, run: () => { if (navigator.clipboard) navigator.clipboard.writeText(email); } },
+      { label: "Email me", k: "Action", icon: ICONS.ext, run: () => (location.href = "mailto:" + email) },
+      { label: "LinkedIn", k: "Social", icon: ICONS.ext, run: () => window.open(body.dataset.linkedin, "_blank", "noopener") },
+      { label: "GitHub", k: "Social", icon: ICONS.ext, run: () => window.open(body.dataset.github, "_blank", "noopener") },
+    ];
+    const input = $(".cmdk-input", cmdk);
+    const list = $(".cmdk-list", cmdk);
+    let filtered = items, sel = 0, lastFocus = null;
+
+    const render = () => {
+      if (!filtered.length) {
+        list.innerHTML = '<li class="cmdk-empty">No matches — try "work" or "email".</li>';
+        return;
+      }
+      list.innerHTML = filtered
+        .map((it, i) => '<li class="cmdk-item' + (i === sel ? " sel" : "") + '" role="option" aria-selected="' + (i === sel) + '" data-i="' + i + '">' + it.icon + "<span>" + it.label + '</span><span class="k">' + it.k + "</span></li>")
+        .join("");
+    };
+    const openPal = () => {
+      lastFocus = document.activeElement;
+      cmdk.hidden = false;
+      input.value = ""; filtered = items; sel = 0; render();
+      requestAnimationFrame(() => input.focus());
+    };
+    const closePal = () => {
+      cmdk.hidden = true;
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+    const runSel = () => {
+      const it = filtered[sel];
+      if (it) { closePal(); it.run(); }
+    };
+
+    input.addEventListener("input", () => {
+      const q = input.value.trim().toLowerCase();
+      filtered = q ? items.filter((it) => it.label.toLowerCase().includes(q)) : items;
+      sel = 0; render();
+    });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") { e.preventDefault(); sel = Math.min(sel + 1, filtered.length - 1); render(); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); sel = Math.max(sel - 1, 0); render(); }
+      else if (e.key === "Enter") { e.preventDefault(); runSel(); }
+    });
+    list.addEventListener("click", (e) => {
+      const li = e.target.closest(".cmdk-item");
+      if (li) { sel = +li.dataset.i; runSel(); }
+    });
+    list.addEventListener("pointermove", (e) => {
+      const li = e.target.closest(".cmdk-item");
+      if (li && +li.dataset.i !== sel) { sel = +li.dataset.i; render(); }
+    });
+    $$("[data-cmdk-close]", cmdk).forEach((el) => el.addEventListener("click", closePal));
+    $$(".cmdk-hint").forEach((el) => el.addEventListener("click", openPal));
+    window.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); cmdk.hidden ? openPal() : closePal(); }
+      else if (e.key === "Escape" && !cmdk.hidden) closePal();
+    });
+    // platform-aware hint label
+    if (/Mac|iPhone|iPad/.test(navigator.platform)) {
+      $$(".cmdk-hint kbd").forEach((k) => { if (k.textContent.toLowerCase() === "ctrl") k.textContent = "⌘"; });
+    }
+  }
+
   /* ---------- Footer year ---------- */
   const yr = $("[data-year]");
   if (yr) yr.textContent = new Date().getFullYear();
