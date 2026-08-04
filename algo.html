@@ -1,0 +1,334 @@
+---
+layout: default
+title: Algorithmic Trading Systems
+permalink: /algo/
+description: >-
+  Kumar Saurabh — I build and operate production algorithmic trading systems for
+  Indian options markets. Strategy automation, tick-level backtesting, multi-broker
+  execution, and the safety engineering that makes live order flow trustworthy.
+---
+
+<style>
+  /* scoped to this page only */
+  .principles { list-style: none; display: grid; gap: 1.4rem; margin-top: 2rem; }
+  .principle { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; align-items: start; }
+  .principle .p-no {
+    font-family: var(--font-mono); font-size: .78rem; color: var(--accent);
+    border: 1px solid var(--accent-line); background: var(--accent-soft);
+    width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+  }
+  .principle h3 { font-size: 1.05rem; margin-bottom: .3rem; }
+  .principle p { color: var(--muted); font-size: .95rem; max-width: 62ch; }
+
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
+  .stack-block { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; background: var(--surface); }
+  .stack-block h3 {
+    font-family: var(--font-mono); font-size: .76rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: .9rem; font-weight: 500;
+  }
+  .stack-block p { color: var(--muted); font-size: .95rem; }
+
+  .honest {
+    margin-top: 2.4rem; border-left: 2px solid var(--line-strong);
+    padding: .2rem 0 .2rem 1.4rem; max-width: 68ch;
+  }
+  .honest p { color: var(--faint); font-size: .9rem; }
+  .honest p + p { margin-top: .7rem; }
+  .honest strong { color: var(--muted); font-weight: 600; }
+</style>
+
+<!-- ============================ HERO ============================ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="hero-badge"><span class="dot"></span> Algorithmic trading systems</span>
+
+      <h1 class="hero-title">
+        <span class="line"><span class="line-inner">Your strategy.</span></span>
+        <span class="line"><span class="line-inner grad-text animate-grad">Built to run itself.</span></span>
+      </h1>
+
+      <p class="hero-sub">
+        I build and operate <strong>production trading systems for Indian options markets</strong> —
+        the execution layer, the backtests that prove it works, and the safety engineering
+        that makes live order flow something you can actually sleep through.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#work-with-me" class="btn btn--primary magnetic">Work with me</a>
+        <a href="#how" class="btn btn--ghost">How I work</a>
+      </div>
+
+      <div class="hero-meta">
+        <div class="item"><div class="n">6</div><div class="l">Indian indices covered</div></div>
+        <div class="item"><div class="n">5+</div><div class="l">Broker integrations</div></div>
+        <div class="item"><div class="n">Tick</div><div class="l">Level backtesting</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true"><span class="bar"></span> scroll</div>
+</section>
+
+<!-- ============================ THE GAP ============================ -->
+<section class="section section--alt" id="gap">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Why this is hard to hire for</span>
+      <h2 class="section-title">Two skills that rarely sit in one person</h2>
+      <p class="section-lead">
+        Plenty of developers can write code. Plenty of traders understand options.
+        The intersection — someone who can hold both a Greeks-aware strategy and a
+        fault-tolerant execution system in their head at once — is genuinely narrow.
+      </p>
+    </div>
+
+    <div class="cards">
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        </div>
+        <h3>A developer alone</h3>
+        <p>
+          Ships something that works on the happy path. Misses that a stalled feed still
+          returns a price, that a retried order can double your position, and that most of
+          your strategy's states never occur on the day they tested it.
+        </p>
+      </article>
+
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        </div>
+        <h3>A trader alone</h3>
+        <p>
+          Knows exactly what the strategy should do, and has no way to prove the code does it.
+          Ends up supervising an automation manually — which is most of the cost of trading it
+          by hand, with none of the confidence.
+        </p>
+      </article>
+
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h3>What I do</h3>
+        <p>
+          Take a strategy you already trade, turn it into a system that executes it exactly,
+          and prove that it does — with replayable tests over historical ticks, not
+          a week of hoping.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ WHAT I BUILD ============================ -->
+<section class="section" id="build">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Services</span>
+      <h2 class="section-title">What I build</h2>
+    </div>
+
+    <div class="cards">
+      <article class="card" data-reveal>
+        <h3>Strategy automation</h3>
+        <p>Your rules, running unattended — entries, exits, re-entries, hedges, position sizing, and the state machine that ties them together.</p>
+        <div class="tags"><span class="tag">state machines</span><span class="tag">order routing</span></div>
+      </article>
+
+      <article class="card" data-reveal>
+        <h3>Backtesting &amp; validation</h3>
+        <p>Tick-level and minute-level engines over years of historical data, so a rule change is evaluated before it's traded, not after.</p>
+        <div class="tags"><span class="tag">tick data</span><span class="tag">walk-forward</span></div>
+      </article>
+
+      <article class="card" data-reveal>
+        <h3>Broker &amp; API integration</h3>
+        <p>Authentication, live quote streams, order placement, fills, and position reconciliation — across multiple brokers, with the failure modes handled.</p>
+        <div class="tags"><span class="tag">websockets</span><span class="tag">reconciliation</span></div>
+      </article>
+
+      <article class="card" data-reveal>
+        <h3>Monitoring &amp; controls</h3>
+        <p>A live view of what the system is doing and why, plus the kill switch, loss caps, and square-off controls you'd want at 2:45pm on a bad day.</p>
+        <div class="tags"><span class="tag">dashboards</span><span class="tag">alerting</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ STACK ============================ -->
+<section class="section section--alt" id="stack">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Depth</span>
+      <h2 class="section-title">The ground I actually work on</h2>
+      <p class="section-lead">Not adjacent experience. This is the day job.</p>
+    </div>
+
+    <div class="stack-grid">
+      <div class="stack-block" data-reveal>
+        <h3>Markets</h3>
+        <p>NIFTY · BANKNIFTY · FINNIFTY · MIDCPNIFTY · SENSEX · BANKEX — index F&amp;O on NSE and BSE, weekly and monthly expiries, with the lot sizes and strike intervals that go with each.</p>
+      </div>
+
+      <div class="stack-block" data-reveal>
+        <h3>Brokers</h3>
+        <p>Fyers · Zerodha · Upstox · Angel One · Nirmal Bang. Plus crypto derivatives venues. Each with its own auth model, rate limits, and quirks that only show up in production.</p>
+      </div>
+
+      <div class="stack-block" data-reveal>
+        <h3>Options craft</h3>
+        <p>Implied volatility, Greeks, straddle and strangle premium behaviour, time decay curves, expiry-day dynamics, and volatility regime classification.</p>
+      </div>
+
+      <div class="stack-block" data-reveal>
+        <h3>Data</h3>
+        <p>Years of tick and minute OHLC across indices, strikes and expiries — the raw material that makes a backtest mean something.</p>
+      </div>
+
+      <div class="stack-block" data-reveal>
+        <h3>Engineering</h3>
+        <p>Python execution engines, event-driven architecture, deterministic replay harnesses, PostgreSQL, FastAPI, cloud deployment, and CI that gates on real tests.</p>
+      </div>
+
+      <div class="stack-block" data-reveal>
+        <h3>Also shipped</h3>
+        <p><a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform for ATM straddle premium and IV, built and operated end to end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ HOW I WORK ============================ -->
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Principles</span>
+      <h2 class="section-title">How I work</h2>
+      <p class="section-lead">
+        This is the part that matters. Anyone can write the entry logic — the difference
+        between an automation you trust and one you babysit is entirely in the discipline
+        around it.
+      </p>
+    </div>
+
+    <ol class="principles">
+      <li class="principle" data-reveal>
+        <span class="p-no">01</span>
+        <div>
+          <h3>Your strategy stays yours</h3>
+          <p>You bring the edge. I build the system that runs it. Your logic isn't reused, isn't shared with anyone else, and isn't traded by me. That's in writing before anything starts.</p>
+        </div>
+      </li>
+
+      <li class="principle" data-reveal>
+        <span class="p-no">02</span>
+        <div>
+          <h3>Replay before paper, paper before live</h3>
+          <p>Every rule is first proven against recorded market data, replayed deterministically so the same input always produces the same output. Then live data with simulated orders. Real money is the last step, never the first.</p>
+        </div>
+      </li>
+
+      <li class="principle" data-reveal>
+        <span class="p-no">03</span>
+        <div>
+          <h3>Every state gets tested, not just the ones that happened</h3>
+          <p>A strategy with a dozen states won't visit most of them on any given day. Live observation can't verify what it never encounters — so states get constructed and tested deliberately, including the boundaries and the ugly ones.</p>
+        </div>
+      </li>
+
+      <li class="principle" data-reveal>
+        <span class="p-no">04</span>
+        <div>
+          <h3>It fails loudly, never silently</h3>
+          <p>A missing price halts the system; it does not quietly substitute the last one it saw. A stopped system costs you an opportunity. A system running on wrong data costs you capital. Those aren't the same risk.</p>
+        </div>
+      </li>
+
+      <li class="principle" data-reveal>
+        <span class="p-no">05</span>
+        <div>
+          <h3>You get evidence, not assurances</h3>
+          <p>Every requirement traces to a test, and every test to a recorded result you can inspect. "It works" isn't a deliverable. The proof is.</p>
+        </div>
+      </li>
+
+      <li class="principle" data-reveal>
+        <span class="p-no">06</span>
+        <div>
+          <h3>Go-live is supervised, not a switch</h3>
+          <p>First session at reduced size with someone watching and the kill switch armed. Then a staged ramp. Plus an agreed rollback plan written before cutover, not improvised during an incident.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================ BACKGROUND ============================ -->
+<section class="section section--alt" id="background">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Background</span>
+      <h2 class="section-title">Where the engineering discipline comes from</h2>
+    </div>
+
+    <div class="stack-grid">
+      <div class="stack-block" data-reveal>
+        <h3>Delivery</h3>
+        <p>PMP-certified program leader with 7+ years shipping software into production — the habits around testing, staged rollout, and evidence come from delivering systems where failure had consequences.</p>
+      </div>
+      <div class="stack-block" data-reveal>
+        <h3>Applied AI</h3>
+        <p>Computer vision, generative and agentic AI in production settings — which is also where the modelling and data-pipeline instincts behind the research side of this work come from.</p>
+      </div>
+      <div class="stack-block" data-reveal>
+        <h3>Education</h3>
+        <p>MBA in Business Analytics (SCMHRD, Symbiosis) · B.Tech in Electronics &amp; Instrumentation (NIT Agartala). Based in Pune, working with clients across India.</p>
+      </div>
+    </div>
+
+    <div class="honest" data-reveal>
+      <p><strong>Some things I won't tell you, on principle.</strong></p>
+      <p>
+        I don't publish returns, win rates, or performance figures — mine or a client's. I build
+        and validate execution systems; I don't sell strategies, tips, or advisory, and I'm not
+        a SEBI-registered adviser. Any strategy I automate is one you already have and already
+        believe in.
+      </p>
+      <p>
+        Automated trading carries real risk, including of loss beyond expectation. A well-built
+        system executes your decisions faithfully and quickly — it does not make them correct.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CONTACT ============================ -->
+<section class="section contact" id="work-with-me">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Get in touch</span>
+      <h2 class="section-title">Tell me what you trade</h2>
+      <p class="section-lead">
+        The best first message is a description of the strategy you already run manually —
+        entries, exits, and what you wish it did while you weren't watching.
+        I'll tell you honestly whether it's a good fit to automate.
+      </p>
+    </div>
+
+    <div class="contact-card" data-reveal>
+      <div class="contact-actions">
+        <a href="mailto:{{ site.social.email }}?subject=Algo%20automation%20enquiry" class="btn btn--primary magnetic">Email me</a>
+        <a href="{{ site.social.linkedin }}" class="btn btn--ghost" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div class="tags" style="margin-top:1.4rem">
+        <span class="tag">NDA before any strategy detail</span>
+        <span class="tag">Fixed scope, agreed up front</span>
+        <span class="tag">Support terms in writing</span>
+      </div>
+    </div>
+  </div>
+</section>
