@@ -3,9 +3,9 @@ layout: default
 title: Algorithmic Trading Systems
 permalink: /algo/
 description: >-
-  Kumar Saurabh — I build and operate production algorithmic trading systems for
-  Indian options markets. Strategy automation, tick-level backtesting, multi-broker
-  execution, and the safety engineering that makes live order flow trustworthy.
+  Kumar Saurabh — I build and operate production algorithmic trading systems across
+  equities, F&O and crypto derivatives. Strategy automation, tick-level backtesting,
+  multi-venue execution, and the safety engineering that makes live order flow trustworthy.
 ---
 
 <style>
@@ -49,9 +49,10 @@ description: >-
       </h1>
 
       <p class="hero-sub">
-        I build and operate <strong>production trading systems for Indian options markets</strong> —
-        the execution layer, the backtests that prove it works, and the safety engineering
-        that makes live order flow something you can actually sleep through.
+        I build and operate <strong>production trading systems</strong> — index F&amp;O,
+        equities, crypto derivatives, or whatever you trade. The execution layer, the
+        backtests that prove it works, and the safety engineering that makes live order
+        flow something you can actually sleep through.
       </p>
 
       <div class="hero-cta">
@@ -60,9 +61,9 @@ description: >-
       </div>
 
       <div class="hero-meta">
-        <div class="item"><div class="n">6</div><div class="l">Indian indices covered</div></div>
-        <div class="item"><div class="n">5+</div><div class="l">Broker integrations</div></div>
+        <div class="item"><div class="n">10</div><div class="l">Broker &amp; venue integrations</div></div>
         <div class="item"><div class="n">Tick</div><div class="l">Level backtesting</div></div>
+        <div class="item"><div class="n">24×7</div><div class="l">Crypto markets too</div></div>
       </div>
     </div>
   </div>
@@ -165,23 +166,37 @@ description: >-
     <div class="section-head" data-reveal>
       <span class="eyebrow">Depth</span>
       <h2 class="section-title">The ground I actually work on</h2>
-      <p class="section-lead">Not adjacent experience. This is the day job.</p>
+      <p class="section-lead">
+        Deepest in index options, because that's the day job. But the execution machinery
+        is instrument-agnostic — if a market has an API and a data feed, the same engineering
+        applies, and I've already shipped it well outside equities.
+      </p>
     </div>
 
     <div class="stack-grid">
       <div class="stack-block" data-reveal>
-        <h3>Markets</h3>
-        <p>NIFTY · BANKNIFTY · FINNIFTY · MIDCPNIFTY · SENSEX · BANKEX — index F&amp;O on NSE and BSE, weekly and monthly expiries, with the lot sizes and strike intervals that go with each.</p>
+        <h3>Indian F&amp;O</h3>
+        <p>NIFTY · BANKNIFTY · FINNIFTY · MIDCPNIFTY · SENSEX · BANKEX — index derivatives on NSE and BSE, weekly and monthly expiries, with the lot sizes and strike intervals that go with each.</p>
       </div>
 
       <div class="stack-block" data-reveal>
-        <h3>Brokers</h3>
-        <p>Fyers · Zerodha · Upstox · Angel One · Nirmal Bang. Plus crypto derivatives venues. Each with its own auth model, rate limits, and quirks that only show up in production.</p>
+        <h3>Crypto derivatives</h3>
+        <p>Perpetuals and options via Delta Exchange and Deribit. Markets that never close, which breaks every assumption a system built around a 9:15–3:30 session quietly made.</p>
       </div>
 
       <div class="stack-block" data-reveal>
-        <h3>Options craft</h3>
-        <p>Implied volatility, Greeks, straddle and strangle premium behaviour, time decay curves, expiry-day dynamics, and volatility regime classification.</p>
+        <h3>Your market</h3>
+        <p>Equities, futures, commodities, FX — the state machine, order manager, reconciliation and safety layer don't care what the instrument is. Only the venue adapter and the contract maths change.</p>
+      </div>
+
+      <div class="stack-block" data-reveal>
+        <h3>Venues</h3>
+        <p>Fyers · Zerodha · Upstox · Angel One · Dhan · Groww · Kotak Neo · Nirmal Bang · Delta · Deribit. Each with its own auth model, rate limits, and quirks that only surface in production.</p>
+      </div>
+
+      <div class="stack-block" data-reveal>
+        <h3>Derivatives craft</h3>
+        <p>Implied volatility, Greeks, straddle and strangle premium behaviour, time decay curves, expiry dynamics, funding rates, and volatility regime classification.</p>
       </div>
 
       <div class="stack-block" data-reveal>
@@ -286,7 +301,7 @@ description: >-
       </div>
       <div class="stack-block" data-reveal>
         <h3>Education</h3>
-        <p>MBA in Business Analytics (SCMHRD, Symbiosis) · B.Tech in Electronics &amp; Instrumentation (NIT Agartala). Based in Pune, working with clients across India.</p>
+        <p>MBA in Business Analytics (SCMHRD, Symbiosis) · B.Tech in Electronics &amp; Instrumentation (NIT Agartala). Based in Pune, working remotely with clients in any market and any timezone.</p>
       </div>
     </div>
 
@@ -295,8 +310,8 @@ description: >-
       <p>
         I don't publish returns, win rates, or performance figures — mine or a client's. I build
         and validate execution systems; I don't sell strategies, tips, or advisory, and I'm not
-        a SEBI-registered adviser. Any strategy I automate is one you already have and already
-        believe in.
+        a SEBI-registered adviser or a registered adviser in any other jurisdiction. Any strategy
+        I automate is one you already have and already believe in.
       </p>
       <p>
         Automated trading carries real risk, including of loss beyond expectation. A well-built
