@@ -45,16 +45,33 @@ description: >-
   }
   .console-live i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s var(--ease) infinite; }
 
-  .console-tiles { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
-  .ctile { padding: .85rem .9rem; border-left: 1px solid var(--line); }
-  .ctile:first-child { border-left: none; }
-  .ctile .cl { font-size: .6rem; letter-spacing: .12em; color: var(--faint); display: block; }
-  .ctile .cv { font-size: .95rem; color: var(--text); margin-top: .3rem; font-weight: 500; }
-  .ctile .cv.ok { color: var(--accent); }
+  /* stage strip: mirrors the replay -> paper -> live pipeline */
+  .console-stages {
+    display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+    padding: .6rem .9rem; border-bottom: 1px solid var(--line);
+  }
+  .cstage {
+    display: inline-flex; align-items: center; gap: .35rem;
+    font-size: .62rem; letter-spacing: .12em; color: var(--faint);
+    border: 1px solid var(--line); border-radius: 999px; padding: .22rem .55rem;
+  }
+  .cstage.done { color: var(--muted); }
+  .cstage.now { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+  .cstage.now i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s var(--ease) infinite; }
+  .console-stages .csep { color: var(--line-strong); font-size: .7rem; }
+
+  /* two panes: what was proven, and what is running */
+  .console-split { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+  .cpane { padding: .8rem .9rem; border-left: 1px solid var(--line); }
+  .cpane:first-child { border-left: none; }
+  .cpane .cl { font-size: .58rem; letter-spacing: .13em; color: var(--faint); display: block; margin-bottom: .5rem; }
+  .crow { display: flex; justify-content: space-between; gap: .6rem; font-size: .68rem; padding: .16rem 0; }
+  .crow span { color: var(--faint); }
+  .crow b { color: var(--text); font-weight: 500; }
+  .crow b.ok { color: var(--accent); }
   @media (max-width: 520px) {
-    .ctile { padding: .7rem .6rem; }
-    .ctile .cl { font-size: .55rem; }
-    .ctile .cv { font-size: .74rem; }
+    .cpane { padding: .7rem .65rem; }
+    .crow { font-size: .62rem; }
   }
 
   .console-chart { display: block; width: 100%; height: 88px; border-bottom: 1px solid var(--line); }
@@ -165,11 +182,11 @@ description: >-
     flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--radius); padding: 1.6rem 1.4rem;
   }
-  .flow-step .step-no {
+  .flow-step .flow-no {
     font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em;
     text-transform: uppercase; color: var(--faint);
   }
-  .flow-step .step-ico {
+  .flow-step .flow-ico {
     width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
     background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
     margin: .9rem 0 1rem;
@@ -180,7 +197,7 @@ description: >-
     background: linear-gradient(160deg, var(--accent-soft), transparent 70%), var(--surface);
     border-color: var(--accent-line); box-shadow: var(--glow);
   }
-  .flow-step--live .step-no { color: var(--accent); }
+  .flow-step--live .flow-no { color: var(--accent); }
   .flow-connector { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; color: var(--faint); }
   .flow-note {
     margin-top: 1.8rem; border-left: 2px solid var(--line-strong);
@@ -246,10 +263,27 @@ description: >-
             <span class="console-live"><i></i> LIVE</span>
           </div>
 
-          <div class="console-tiles">
-            <div class="ctile"><span class="cl">STATE</span><div class="cv">IN_POSITION</div></div>
-            <div class="ctile"><span class="cl">FEED</span><div class="cv ok">OK · 40ms</div></div>
-            <div class="ctile"><span class="cl">LEGS</span><div class="cv">2 · hedged</div></div>
+          <div class="console-stages">
+            <span class="cstage done">✓ BACKTESTED</span>
+            <span class="csep">→</span>
+            <span class="cstage done">✓ PAPER TRADED</span>
+            <span class="csep">→</span>
+            <span class="cstage now"><i></i> LIVE</span>
+          </div>
+
+          <div class="console-split">
+            <div class="cpane">
+              <span class="cl">BACKTEST</span>
+              <div class="crow"><span>period</span><b>2019–2025</b></div>
+              <div class="crow"><span>data</span><b>tick replay</b></div>
+              <div class="crow"><span>states</span><b class="ok">all covered</b></div>
+            </div>
+            <div class="cpane">
+              <span class="cl">LIVE EXECUTION</span>
+              <div class="crow"><span>strategy</span><b class="ok">running</b></div>
+              <div class="crow"><span>position</span><b>hedged</b></div>
+              <div class="crow"><span>orders today</span><b>14 filled</b></div>
+            </div>
           </div>
 
           <svg class="console-chart" viewBox="0 0 420 88" preserveAspectRatio="none">
@@ -265,10 +299,10 @@ description: >-
           </svg>
 
           <div class="clog">
-            <div><span class="ct">09:20:03</span> <span class="cok">FILL</span> 24500CE ×2 @ 118.40</div>
-            <div><span class="ct">09:34:11</span> <span class="cok">HEDGE</span> 24700CE ×2 placed</div>
-            <div><span class="ct">11:02:47</span> <span class="cwarn">WARN</span> tick gap 1.4s — halt armed</div>
-            <div><span class="ct">11:02:49</span> <span class="cok">RESUME</span> feed recovered</div>
+            <div><span class="ct">09:20</span> <span class="cok">ENTRY</span> short straddle opened</div>
+            <div><span class="ct">09:34</span> <span class="cok">HEDGE</span> protective leg added</div>
+            <div><span class="ct">13:15</span> <span class="cwarn">ADJUST</span> strike rolled up</div>
+            <div><span class="ct">15:10</span> <span class="cok">EXIT</span> squared off — flat</div>
           </div>
 
           <div class="console-foot">
@@ -588,8 +622,8 @@ description: >-
 
     <div class="flow" data-reveal>
       <div class="flow-step">
-        <span class="step-no">Stage 1</span>
-        <div class="step-ico" aria-hidden="true">
+        <span class="flow-no">Stage 1</span>
+        <div class="flow-ico" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg>
         </div>
         <h3>Replay</h3>
@@ -601,8 +635,8 @@ description: >-
       </div>
 
       <div class="flow-step">
-        <span class="step-no">Stage 2</span>
-        <div class="step-ico" aria-hidden="true">
+        <span class="flow-no">Stage 2</span>
+        <div class="flow-ico" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
         </div>
         <h3>Paper</h3>
@@ -614,8 +648,8 @@ description: >-
       </div>
 
       <div class="flow-step flow-step--live">
-        <span class="step-no">Stage 3</span>
-        <div class="step-ico" aria-hidden="true">
+        <span class="flow-no">Stage 3</span>
+        <div class="flow-ico" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.48M7.76 7.76a6 6 0 0 0 0 8.48M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
         </div>
         <h3>Live</h3>
