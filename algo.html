@@ -62,6 +62,10 @@ description: >-
     width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; margin-bottom: 1.1rem;
     color: var(--accent); border: 1px solid var(--accent-line); background: var(--accent-soft);
   }
+  .eq-result.card:hover {
+    border-color: var(--accent-line);
+    background: linear-gradient(160deg, var(--accent-soft), transparent 70%), var(--surface-2);
+  }
   .eq-result h3 { font-size: 1.2rem; margin-bottom: .5rem; }
   .eq-result p { color: var(--muted); font-size: 1rem; max-width: 60ch; }
   @media (max-width: 720px) {
@@ -93,6 +97,8 @@ description: >-
 
 <!-- ============================ HERO ============================ -->
 <section class="hero">
+  <canvas class="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-spot" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hero-inner">
       <span class="hero-badge"><span class="dot"></span> Algorithmic trading systems &amp; AI agents</span>
@@ -115,7 +121,7 @@ description: >-
       </div>
 
       <div class="hero-meta">
-        <div class="item"><div class="n">10</div><div class="l">Broker &amp; venue integrations</div></div>
+        <div class="item"><div class="n"><span data-count="10">10</span></div><div class="l">Broker &amp; venue integrations</div></div>
         <div class="item"><div class="n">Tick</div><div class="l">Level backtesting</div></div>
         <div class="item"><div class="n">24×7</div><div class="l">Crypto markets too</div></div>
       </div>
@@ -139,7 +145,7 @@ description: >-
     </div>
 
     <div class="equation" data-reveal>
-      <div class="eq-side">
+      <div class="eq-side card">
         <div class="card-ico" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
         </div>
@@ -153,7 +159,7 @@ description: >-
 
       <span class="eq-op" aria-hidden="true">+</span>
 
-      <div class="eq-side">
+      <div class="eq-side card">
         <div class="card-ico" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
         </div>
@@ -170,7 +176,7 @@ description: >-
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </div>
 
-    <div class="eq-result" data-reveal>
+    <div class="eq-result card" data-reveal>
       <div class="card-ico" aria-hidden="true">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
       </div>
@@ -240,7 +246,7 @@ description: >-
     </div>
 
     <div class="stack-grid">
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Indian F&amp;O</h3>
         <p>Index derivatives on NSE and BSE, weekly and monthly expiries, with the lot sizes and strike intervals that go with each.</p>
         <div class="tags">
@@ -249,17 +255,17 @@ description: >-
         </div>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Crypto derivatives</h3>
         <p>Perpetuals and options via Delta Exchange and Deribit. Markets that never close, which breaks every assumption a system built around a 9:15–3:30 session quietly made.</p>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Your market</h3>
         <p>Equities, futures, commodities, FX — the state machine, order manager, reconciliation and safety layer don't care what the instrument is. Only the venue adapter and the contract maths change.</p>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Venues</h3>
         <p>Each with its own auth model, rate limits, and quirks that only surface in production.</p>
         <div class="tags">
@@ -269,27 +275,27 @@ description: >-
         </div>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Derivatives craft</h3>
         <p>Implied volatility, Greeks, straddle and strangle premium behaviour, time decay curves, expiry dynamics, funding rates, and volatility regime classification.</p>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Data</h3>
         <p>Years of tick and minute OHLC across indices, strikes and expiries — the raw material that makes a backtest mean something.</p>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Engineering</h3>
         <p>Python execution engines, event-driven architecture, deterministic replay harnesses, PostgreSQL, FastAPI, cloud deployment, and CI that gates on real tests.</p>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>AI &amp; agentic tooling</h3>
         <p>LLMs and agentic workflows via the Model Context Protocol, applied to trading — autonomous decision agents, machine-learning regime classification, and generative tooling for research and reporting.</p>
       </div>
 
-      <div class="stack-block" data-reveal>
+      <div class="stack-block card" data-reveal>
         <h3>Also shipped</h3>
         <p><a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform for ATM straddle premium and IV, built and operated end to end.</p>
       </div>
