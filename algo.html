@@ -99,6 +99,28 @@ description: >-
   /* -- Stack section: pill lists for enumerable items -- */
   .stack-block .tags { margin-top: 1rem; }
 
+  /* -- Stack section: radar chart summarizing depth -- */
+  .radar-wrap { margin-top: 2.2rem; text-align: center; }
+  .radar-svg { width: min(100%, 420px); height: auto; }
+  .radar-svg text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; fill: var(--faint); }
+
+  /* -- Build section: architecture chain diagram -- */
+  .chain { display: flex; align-items: center; justify-content: center; gap: .7rem; margin-top: 2rem; flex-wrap: wrap; }
+  .chain-node { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
+  .chain-ico {
+    width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+  }
+  .chain-node span {
+    font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .chain-arrow { color: var(--faint); flex-shrink: 0; }
+  @media (max-width: 620px) {
+    .chain { flex-direction: column; }
+    .chain-arrow { transform: rotate(90deg); }
+  }
+
   /* -- Background section: Venn diagram instead of text columns -- */
   .venn-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 2.5rem; margin-top: 2.2rem; }
   .venn-svg { width: min(100%, 380px); height: auto; flex-shrink: 0; margin-inline: auto; }
@@ -245,32 +267,59 @@ description: >-
       <h2 class="section-title">What I build</h2>
     </div>
 
+    <div class="chain" data-reveal>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.3h6c0-1.1.4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg></div>
+        <span>Strategy</span>
+      </div>
+      <svg class="chain-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
+        <span>Engine</span>
+      </div>
+      <svg class="chain-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v4M15 3v4M6 7h12l-1 5a5 5 0 0 1-10 0L6 7Z"/><path d="M10 16v2a2 2 0 0 0 4 0v-2"/></svg></div>
+        <span>Venues</span>
+      </div>
+      <svg class="chain-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <span>Monitoring</span>
+      </div>
+    </div>
+
     <div class="cards">
       <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><circle cx="4" cy="13" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="20" cy="14" r="2"/></svg></div>
         <h3>Strategy automation</h3>
         <p>Your rules, running unattended — entries, exits, re-entries, hedges, position sizing, and the state machine that ties them together.</p>
         <div class="tags"><span class="tag">state machines</span><span class="tag">order routing</span></div>
       </article>
 
       <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2v6.5L4.5 17a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L15 8.5V2"/><path d="M9 2h6M8 14h8"/></svg></div>
         <h3>Backtesting &amp; validation</h3>
         <p>Tick-level and minute-level engines over years of historical data, so a rule change is evaluated before it's traded, not after.</p>
         <div class="tags"><span class="tag">tick data</span><span class="tag">walk-forward</span></div>
       </article>
 
       <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v4M15 3v4M6 7h12l-1 5a5 5 0 0 1-10 0L6 7Z"/><path d="M10 16v2a2 2 0 0 0 4 0v-2"/></svg></div>
         <h3>Broker &amp; API integration</h3>
         <p>Authentication, live quote streams, order placement, fills, and position reconciliation — across multiple brokers, with the failure modes handled.</p>
         <div class="tags"><span class="tag">websockets</span><span class="tag">reconciliation</span></div>
       </article>
 
       <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>Monitoring &amp; controls</h3>
         <p>A live view of what the system is doing and why, plus the kill switch, loss caps, and square-off controls you'd want at 2:45pm on a bad day.</p>
         <div class="tags"><span class="tag">dashboards</span><span class="tag">alerting</span></div>
       </article>
 
       <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></div>
         <h3>AI trading agents</h3>
         <p>LLM-assisted and agentic layers on top of the execution engine — natural-language strategy specs, regime and anomaly detection, and autonomous agents that watch positions and escalate instead of a human staring at a screen all day.</p>
         <div class="tags"><span class="tag">LLM agents</span><span class="tag">agentic AI</span><span class="tag">MCP</span></div>
@@ -292,8 +341,36 @@ description: >-
       </p>
     </div>
 
+    <div class="radar-wrap" data-reveal>
+      <svg class="radar-svg" viewBox="0 0 400 340" role="img" aria-label="Depth radar across F&O options, crypto, data, engineering, AI agents, and broker integrations, all rated high">
+        <polygon points="200,50 303.9,110 303.9,230 200,290 96.1,230 96.1,110" fill="none" stroke="var(--line)"/>
+        <polygon points="200,90 269.3,130 269.3,210 200,250 130.7,210 130.7,130" fill="none" stroke="var(--line)"/>
+        <polygon points="200,130 234.6,150 234.6,190 200,210 165.4,190 165.4,150" fill="none" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="200" y2="50" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="303.9" y2="110" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="303.9" y2="230" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="200" y2="290" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="96.1" y2="230" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="96.1" y2="110" stroke="var(--line)"/>
+        <polygon points="200,56 283.14,122 293.53,224 200,278 114.79,219.2 108.55,117.2" fill="var(--accent)" fill-opacity=".18" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="200" cy="56" r="3" fill="var(--accent)"/>
+        <circle cx="283.14" cy="122" r="3" fill="var(--accent)"/>
+        <circle cx="293.53" cy="224" r="3" fill="var(--accent)"/>
+        <circle cx="200" cy="278" r="3" fill="var(--accent)"/>
+        <circle cx="114.79" cy="219.2" r="3" fill="var(--accent)"/>
+        <circle cx="108.55" cy="117.2" r="3" fill="var(--accent)"/>
+        <text x="200" y="20" text-anchor="middle">F&amp;O OPTIONS</text>
+        <text x="330" y="95" text-anchor="start">CRYPTO</text>
+        <text x="330" y="245" text-anchor="start">DATA</text>
+        <text x="200" y="320" text-anchor="middle">ENGINEERING</text>
+        <text x="70" y="245" text-anchor="end">AI/AGENTS</text>
+        <text x="70" y="95" text-anchor="end">BROKERS</text>
+      </svg>
+    </div>
+
     <div class="stack-grid">
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
         <h3>Indian F&amp;O</h3>
         <p>Index derivatives on NSE and BSE, weekly and monthly expiries, with the lot sizes and strike intervals that go with each.</p>
         <div class="tags">
@@ -303,16 +380,19 @@ description: >-
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M8 9h5M8 15h5"/></svg></div>
         <h3>Crypto derivatives</h3>
         <p>Perpetuals and options via Delta Exchange and Deribit. Markets that never close, which breaks every assumption a system built around a 9:15–3:30 session quietly made.</p>
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></div>
         <h3>Your market</h3>
         <p>Equities, futures, commodities, FX — the state machine, order manager, reconciliation and safety layer don't care what the instrument is. Only the venue adapter and the contract maths change.</p>
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 15 15 9M8 12a4 4 0 0 1 0-5.6l2-2a4 4 0 0 1 5.6 5.6l-1 1M16 12a4 4 0 0 1 0 5.6l-2 2a4 4 0 0 1-5.6-5.6l1-1"/></svg></div>
         <h3>Venues</h3>
         <p>Each with its own auth model, rate limits, and quirks that only surface in production.</p>
         <div class="tags">
@@ -323,26 +403,31 @@ description: >-
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4 3 20h18L12 4Z"/></svg></div>
         <h3>Derivatives craft</h3>
         <p>Implied volatility, Greeks, straddle and strangle premium behaviour, time decay curves, expiry dynamics, funding rates, and volatility regime classification.</p>
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
         <h3>Data</h3>
         <p>Years of tick and minute OHLC across indices, strikes and expiries — the raw material that makes a backtest mean something.</p>
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4 3 12l5 8M16 4l5 8-5 8"/></svg></div>
         <h3>Engineering</h3>
         <p>Python execution engines, event-driven architecture, deterministic replay harnesses, PostgreSQL, FastAPI, cloud deployment, and CI that gates on real tests.</p>
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></div>
         <h3>AI &amp; agentic tooling</h3>
         <p>LLMs and agentic workflows via the Model Context Protocol, applied to trading — autonomous decision agents, machine-learning regime classification, and generative tooling for research and reporting.</p>
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg></div>
         <h3>Also shipped</h3>
         <p>
           <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform for ATM straddle premium and IV, built and operated end to end.
