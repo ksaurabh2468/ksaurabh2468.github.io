@@ -3,9 +3,9 @@ layout: default
 title: Algorithmic Trading Systems & AI Agents
 description: >-
   Kumar Saurabh — I build and operate production algorithmic trading systems and AI trading
-  agents across equities, F&O and crypto derivatives. Strategy automation, agentic execution,
-  LLM-assisted decisioning, tick-level backtesting, multi-venue execution, and the safety
-  engineering that makes live order flow trustworthy.
+  agents across index F&O, MCX commodities, equities and crypto derivatives. Strategy
+  automation, agentic execution, LLM-assisted decisioning, tick-level backtesting, multi-venue
+  execution, and the safety engineering that makes live order flow trustworthy.
 ---
 
 <style>
@@ -329,6 +329,7 @@ description: >-
     <span class="marquee-item">Groww</span>
     <span class="marquee-item">Kotak Neo</span>
     <span class="marquee-item">Nirmal Bang</span>
+    <span class="marquee-item">MCX</span>
     <span class="marquee-item">Delta Exchange</span>
     <span class="marquee-item">Deribit</span>
     <!-- duplicate set for a seamless loop -->
@@ -340,6 +341,7 @@ description: >-
     <span class="marquee-item">Groww</span>
     <span class="marquee-item">Kotak Neo</span>
     <span class="marquee-item">Nirmal Bang</span>
+    <span class="marquee-item">MCX</span>
     <span class="marquee-item">Delta Exchange</span>
     <span class="marquee-item">Deribit</span>
   </div>
@@ -352,6 +354,10 @@ description: >-
     <span class="marquee-item">MIDCPNIFTY</span>
     <span class="marquee-item">SENSEX</span>
     <span class="marquee-item">BANKEX</span>
+    <span class="marquee-item">CRUDE OIL</span>
+    <span class="marquee-item">NATURAL GAS</span>
+    <span class="marquee-item">GOLD</span>
+    <span class="marquee-item">SILVER</span>
     <span class="marquee-item">Perpetuals</span>
     <span class="marquee-item">Implied Volatility</span>
     <span class="marquee-item">Greeks</span>
@@ -363,6 +369,10 @@ description: >-
     <span class="marquee-item">MIDCPNIFTY</span>
     <span class="marquee-item">SENSEX</span>
     <span class="marquee-item">BANKEX</span>
+    <span class="marquee-item">CRUDE OIL</span>
+    <span class="marquee-item">NATURAL GAS</span>
+    <span class="marquee-item">GOLD</span>
+    <span class="marquee-item">SILVER</span>
     <span class="marquee-item">Perpetuals</span>
     <span class="marquee-item">Implied Volatility</span>
     <span class="marquee-item">Greeks</span>
@@ -526,29 +536,33 @@ description: >-
         </p>
       </div>
 
-      <svg class="radar-svg" data-reveal viewBox="0 0 400 340" role="img" aria-label="Depth radar across F&O options, crypto, data, engineering, AI agents, and broker integrations">
-        <polygon points="200,50 303.9,110 303.9,230 200,290 96.1,230 96.1,110" fill="none" stroke="var(--line)"/>
-        <polygon points="200,90 269.3,130 269.3,210 200,250 130.7,210 130.7,130" fill="none" stroke="var(--line)"/>
-        <polygon points="200,130 234.6,150 234.6,190 200,210 165.4,190 165.4,150" fill="none" stroke="var(--line)"/>
-        <line x1="200" y1="170" x2="200" y2="50" stroke="var(--line)"/>
-        <line x1="200" y1="170" x2="303.9" y2="110" stroke="var(--line)"/>
-        <line x1="200" y1="170" x2="303.9" y2="230" stroke="var(--line)"/>
-        <line x1="200" y1="170" x2="200" y2="290" stroke="var(--line)"/>
-        <line x1="200" y1="170" x2="96.1" y2="230" stroke="var(--line)"/>
-        <line x1="200" y1="170" x2="96.1" y2="110" stroke="var(--line)"/>
-        <polygon points="200,56 283.14,122 293.53,224 200,278 114.79,219.2 108.55,117.2" fill="var(--accent)" fill-opacity=".18" stroke="var(--accent)" stroke-width="1.5"/>
-        <circle cx="200" cy="56" r="3" fill="var(--accent)"/>
-        <circle cx="283.14" cy="122" r="3" fill="var(--accent)"/>
-        <circle cx="293.53" cy="224" r="3" fill="var(--accent)"/>
-        <circle cx="200" cy="278" r="3" fill="var(--accent)"/>
-        <circle cx="114.79" cy="219.2" r="3" fill="var(--accent)"/>
-        <circle cx="108.55" cy="117.2" r="3" fill="var(--accent)"/>
-        <text x="200" y="20" text-anchor="middle">F&amp;O OPTIONS</text>
-        <text x="330" y="95" text-anchor="start">CRYPTO</text>
-        <text x="330" y="245" text-anchor="start">DATA</text>
-        <text x="200" y="320" text-anchor="middle">ENGINEERING</text>
-        <text x="70" y="245" text-anchor="end">AI/AGENTS</text>
-        <text x="70" y="95" text-anchor="end">BROKERS</text>
+      <svg class="radar-svg" data-reveal viewBox="0 0 420 300" role="img"
+           aria-label="Depth radar across index F&amp;O options, MCX commodities, crypto, market data, engineering, AI agents and broker integrations">
+        <polygon points="235.0,54.0 322.6,96.2 344.2,190.9 283.6,266.9 186.4,266.9 125.8,190.9 147.4,96.2" fill="none" stroke="var(--line)"/>
+        <polygon points="235.0,92.1 292.8,119.9 307.1,182.4 267.1,232.6 202.9,232.6 162.9,182.4 177.2,119.9" fill="none" stroke="var(--line)"/>
+        <polygon points="235.0,129.0 263.9,143.0 271.0,174.2 251.0,199.3 219.0,199.3 199.0,174.2 206.1,143.0" fill="none" stroke="var(--line)"/>
+        <line x1="235" y1="166" x2="235.0" y2="54.0" stroke="var(--line)"/>
+        <line x1="235" y1="166" x2="322.6" y2="96.2" stroke="var(--line)"/>
+        <line x1="235" y1="166" x2="344.2" y2="190.9" stroke="var(--line)"/>
+        <line x1="235" y1="166" x2="283.6" y2="266.9" stroke="var(--line)"/>
+        <line x1="235" y1="166" x2="186.4" y2="266.9" stroke="var(--line)"/>
+        <line x1="235" y1="166" x2="125.8" y2="190.9" stroke="var(--line)"/>
+        <line x1="235" y1="166" x2="147.4" y2="96.2" stroke="var(--line)"/>
+        <polygon points="235.0,57.4 305.1,110.1 331.1,187.9 278.7,256.8 188.8,261.9 141.1,187.4 154.4,101.8" fill="var(--accent)" fill-opacity=".18" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="235.0" cy="57.4" r="3" fill="var(--accent)"/>
+        <circle cx="305.1" cy="110.1" r="3" fill="var(--accent)"/>
+        <circle cx="331.1" cy="187.9" r="3" fill="var(--accent)"/>
+        <circle cx="278.7" cy="256.8" r="3" fill="var(--accent)"/>
+        <circle cx="188.8" cy="261.9" r="3" fill="var(--accent)"/>
+        <circle cx="141.1" cy="187.4" r="3" fill="var(--accent)"/>
+        <circle cx="154.4" cy="101.8" r="3" fill="var(--accent)"/>
+        <text x="235" y="36" text-anchor="middle">F&amp;O OPTIONS</text>
+        <text x="340" y="86" text-anchor="start">COMMODITIES</text>
+        <text x="366" y="200" text-anchor="start">CRYPTO</text>
+        <text x="293" y="291" text-anchor="start">DATA</text>
+        <text x="177" y="291" text-anchor="end">ENGINEERING</text>
+        <text x="104" y="200" text-anchor="end">AI / AGENTS</text>
+        <text x="130" y="86" text-anchor="end">BROKERS</text>
       </svg>
     </div>
 
@@ -571,10 +585,20 @@ description: >-
       </div>
 
       <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M6 21V9l6-5 6 5v12"/><path d="M10 21v-6h4v6"/></svg></div>
+        <h3>MCX commodities</h3>
+        <p>Indian commodity futures and options — different session hours, different lot maths.</p>
+        <div class="tags">
+          <span class="tag">crude oil</span><span class="tag">natural gas</span><span class="tag">gold</span>
+          <span class="tag">silver</span><span class="tag">copper</span><span class="tag">zinc</span>
+        </div>
+      </div>
+
+      <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></div>
         <h3>Your market</h3>
         <p>Only the venue adapter and contract maths change.</p>
-        <div class="tags"><span class="tag">equities</span><span class="tag">futures</span><span class="tag">commodities</span><span class="tag">FX</span></div>
+        <div class="tags"><span class="tag">equities</span><span class="tag">futures</span><span class="tag">FX</span><span class="tag">your venue</span></div>
       </div>
 
       <div class="stack-block card" data-reveal>

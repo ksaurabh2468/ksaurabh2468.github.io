@@ -7,9 +7,9 @@ title: Kumar Saurabh
 tagline: "Algorithmic Trading Systems & AI Agents"
 description: >-
   Kumar Saurabh — I build and operate production algorithmic trading systems and
-  AI trading agents across equities, F&O and crypto derivatives, plus the
-  tick-level backtesting and safety engineering that makes live order flow
-  trustworthy.
+  AI trading agents across index F&O, MCX commodities, equities and crypto
+  derivatives, plus the tick-level backtesting and safety engineering that makes
+  live order flow trustworthy.
 author: Kumar Saurabh
 
 # IMPORTANT: for a GitHub Pages user site the repo MUST be named exactly
