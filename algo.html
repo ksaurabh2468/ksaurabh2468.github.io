@@ -10,57 +10,87 @@ description: >-
 ---
 
 <style>
-  /* scoped to this page only */
-  /* -- How I work: pipeline diagram instead of a flat numbered list -- */
-  .flow { display: flex; align-items: stretch; gap: 0; margin-top: 2rem; }
-  .flow-step {
-    flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius); padding: 1.6rem 1.4rem;
+  /* ========== scoped to this page only ========== */
+
+  /* -- Hero: two-column with a console mockup -- */
+  .hero-grid {
+    display: grid; grid-template-columns: 1.04fr .96fr;
+    gap: clamp(2rem, 4vw, 3.6rem); align-items: center;
   }
-  .flow-step .step-no {
-    font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--faint);
+  @media (max-width: 1040px) { .hero-grid { grid-template-columns: 1fr; } }
+  /* title is sized for a full-width hero upstream; rein it in for the 2-col layout */
+  .hero-grid .hero-title { font-size: clamp(2rem, 4vw, 3.2rem); }
+  .hero-grid .hero-sub { font-size: clamp(1rem, 1.6vw, 1.12rem); }
+
+  /* -- Console mockup (operational telemetry, not performance) -- */
+  .console {
+    position: relative; z-index: 2;
+    border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden;
+    background: linear-gradient(170deg, var(--surface-2), var(--bg-2));
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,.9), var(--glow);
+    font-family: var(--font-mono);
   }
-  .flow-step .step-ico {
-    width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
-    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
-    margin: .9rem 0 1rem;
+  .console-bar {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .7rem .9rem; border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.02);
   }
-  .flow-step h3 { font-size: 1.02rem; margin-bottom: .4rem; }
-  .flow-step p { color: var(--muted); font-size: .87rem; }
-  .flow-step--live {
-    background: linear-gradient(160deg, var(--accent-soft), transparent 70%), var(--surface);
-    border-color: var(--accent-line); box-shadow: var(--glow);
+  .console-bar .cdot { width: 9px; height: 9px; border-radius: 50%; background: var(--line-strong); }
+  .console-name { margin-left: .5rem; font-size: .72rem; color: var(--faint); letter-spacing: .06em; }
+  .console-live {
+    margin-left: auto; display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .66rem; letter-spacing: .14em; color: var(--accent);
+    border: 1px solid var(--accent-line); background: var(--accent-soft);
+    padding: .2rem .55rem; border-radius: 999px;
   }
-  .flow-step--live .step-no { color: var(--accent); }
-  .flow-connector { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; color: var(--faint); }
-  .flow-note {
-    margin-top: 1.8rem; border-left: 2px solid var(--line-strong);
-    padding: .1rem 0 .1rem 1.2rem; max-width: 68ch; color: var(--faint); font-size: .9rem;
-  }
-  .flow-note strong { color: var(--muted); font-weight: 600; }
-  @media (max-width: 860px) {
-    .flow { flex-direction: column; gap: 1rem; }
-    .flow-connector { width: auto; height: 28px; transform: rotate(90deg); align-self: center; }
+  .console-live i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s var(--ease) infinite; }
+
+  .console-tiles { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+  .ctile { padding: .85rem .9rem; border-left: 1px solid var(--line); }
+  .ctile:first-child { border-left: none; }
+  .ctile .cl { font-size: .6rem; letter-spacing: .12em; color: var(--faint); display: block; }
+  .ctile .cv { font-size: .95rem; color: var(--text); margin-top: .3rem; font-weight: 500; }
+  .ctile .cv.ok { color: var(--accent); }
+  @media (max-width: 520px) {
+    .ctile { padding: .7rem .6rem; }
+    .ctile .cl { font-size: .55rem; }
+    .ctile .cv { font-size: .74rem; }
   }
 
-  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
-  .stack-block { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; background: var(--surface); }
-  .stack-block h3 {
-    font-family: var(--font-mono); font-size: .76rem; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--faint); margin-bottom: .9rem; font-weight: 500;
-  }
-  .stack-block p { color: var(--muted); font-size: .95rem; }
+  .console-chart { display: block; width: 100%; height: 88px; border-bottom: 1px solid var(--line); }
 
-  .honest {
-    margin-top: 2.4rem; border-left: 2px solid var(--line-strong);
-    padding: .2rem 0 .2rem 1.4rem; max-width: 68ch;
-  }
-  .honest p { color: var(--faint); font-size: .9rem; }
-  .honest p + p { margin-top: .7rem; }
-  .honest strong { color: var(--muted); font-weight: 600; }
+  .clog { padding: .7rem .9rem; display: grid; gap: .38rem; }
+  .clog div { font-size: .68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .clog .ct { color: var(--faint); }
+  .clog .cok { color: var(--accent); }
+  .clog .cwarn { color: #f5b544; }
 
-  /* -- Gap section: equation layout instead of a 3-up card grid -- */
+  .console-foot {
+    display: flex; align-items: center; gap: .7rem;
+    padding: .65rem .9rem; border-top: 1px solid var(--line); background: rgba(255,255,255,.02);
+  }
+  .cbar { flex: 1; height: 4px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .cbar i { display: block; height: 100%; width: 38%; border-radius: 999px; background: var(--grad); }
+  .console-foot .cf { font-size: .62rem; letter-spacing: .1em; color: var(--faint); }
+  .console-foot .carmed { color: var(--accent); }
+  .console-cap { margin-top: .7rem; font-size: .68rem; color: var(--faint); font-family: var(--font-mono); text-align: right; }
+
+  /* -- Stat band: big numbers, fast absorption -- */
+  .statband { border-block: 1px solid var(--line); background: var(--bg-2); }
+  .statband .wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .statcell { padding: clamp(1.6rem, 3.5vw, 2.6rem) 1.2rem; border-left: 1px solid var(--line); }
+  .statcell:first-child { border-left: none; }
+  .statcell .sn {
+    font-family: var(--font-display); font-weight: 700; letter-spacing: -.03em;
+    font-size: clamp(2.2rem, 5.5vw, 3.4rem); line-height: 1;
+  }
+  .statcell .sl { margin-top: .5rem; font-size: .78rem; color: var(--faint); letter-spacing: .03em; }
+  @media (max-width: 620px) {
+    .statcell { border-left: none; border-top: 1px solid var(--line); }
+    .statcell:first-child { border-top: none; }
+  }
+
+  /* -- Gap section: equation layout -- */
   .equation { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.4rem; align-items: stretch; margin-top: 2rem; }
   .eq-side { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; }
   .eq-side .card-ico {
@@ -96,14 +126,6 @@ description: >-
     .eq-op { transform: rotate(90deg); padding: .4rem 0; }
   }
 
-  /* -- Stack section: pill lists for enumerable items -- */
-  .stack-block .tags { margin-top: 1rem; }
-
-  /* -- Stack section: radar chart summarizing depth -- */
-  .radar-wrap { margin-top: 2.2rem; text-align: center; }
-  .radar-svg { width: min(100%, 420px); height: auto; }
-  .radar-svg text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; fill: var(--faint); }
-
   /* -- Build section: architecture chain diagram -- */
   .chain { display: flex; align-items: center; justify-content: center; gap: .7rem; margin-top: 2rem; flex-wrap: wrap; }
   .chain-node { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
@@ -121,7 +143,56 @@ description: >-
     .chain-arrow { transform: rotate(90deg); }
   }
 
-  /* -- Background section: Venn diagram instead of text columns -- */
+  /* -- Stack grid -- */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
+  .stack-block { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; background: var(--surface); }
+  .stack-block h3 {
+    font-family: var(--font-mono); font-size: .76rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: .9rem; font-weight: 500;
+  }
+  .stack-block p { color: var(--muted); font-size: .95rem; }
+  .stack-block .tags { margin-top: 1rem; }
+
+  /* -- Stack: radar chart, side by side with the lead -- */
+  .radar-split { display: grid; grid-template-columns: 1fr auto; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+  .radar-svg { width: min(100%, 400px); height: auto; }
+  .radar-svg text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; fill: var(--faint); }
+  @media (max-width: 900px) { .radar-split { grid-template-columns: 1fr; } .radar-svg { margin-inline: auto; } }
+
+  /* -- How I work: pipeline diagram -- */
+  .flow { display: flex; align-items: stretch; gap: 0; margin-top: 2rem; }
+  .flow-step {
+    flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1.6rem 1.4rem;
+  }
+  .flow-step .step-no {
+    font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint);
+  }
+  .flow-step .step-ico {
+    width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+    margin: .9rem 0 1rem;
+  }
+  .flow-step h3 { font-size: 1.02rem; margin-bottom: .4rem; }
+  .flow-step p { color: var(--muted); font-size: .87rem; }
+  .flow-step--live {
+    background: linear-gradient(160deg, var(--accent-soft), transparent 70%), var(--surface);
+    border-color: var(--accent-line); box-shadow: var(--glow);
+  }
+  .flow-step--live .step-no { color: var(--accent); }
+  .flow-connector { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; color: var(--faint); }
+  .flow-note {
+    margin-top: 1.8rem; border-left: 2px solid var(--line-strong);
+    padding: .1rem 0 .1rem 1.2rem; max-width: 68ch; color: var(--faint); font-size: .9rem;
+  }
+  .flow-note strong { color: var(--muted); font-weight: 600; }
+  @media (max-width: 860px) {
+    .flow { flex-direction: column; gap: 1rem; }
+    .flow-connector { width: auto; height: 28px; transform: rotate(90deg); align-self: center; }
+  }
+
+  /* -- Background: Venn diagram -- */
   .venn-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 2.5rem; margin-top: 2.2rem; }
   .venn-svg { width: min(100%, 380px); height: auto; flex-shrink: 0; margin-inline: auto; }
   .venn-captions { flex: 1; min-width: 240px; display: grid; gap: 1.1rem; }
@@ -130,14 +201,14 @@ description: >-
   .venn-cap h3 { font-size: .95rem; margin-bottom: .15rem; }
   .venn-cap p { color: var(--muted); font-size: .88rem; }
 
-  /* -- Hero: decorative candlestick chart -- */
-  .hero-chart { position: absolute; top: 50%; right: 1%; transform: translateY(-50%); width: min(30vw, 380px); opacity: .55; pointer-events: none; z-index: 1; }
-  .hero-chart .up { fill: var(--accent); stroke: var(--accent); }
-  .hero-chart .down { fill: var(--faint); stroke: var(--faint); }
-  .hero-chart .trend { stroke: var(--accent-2); }
-  @media (max-width: 1150px) { .hero-chart { display: none; } }
+  .honest {
+    margin-top: 2.4rem; border-left: 2px solid var(--line-strong);
+    padding: .2rem 0 .2rem 1.4rem; max-width: 68ch;
+  }
+  .honest p { color: var(--faint); font-size: .9rem; }
+  .honest p + p { margin-top: .7rem; }
+  .honest strong { color: var(--muted); font-weight: 600; }
 
-  /* -- Also shipped: sparkline accent -- */
   .spark { vertical-align: middle; margin-left: .5rem; }
 </style>
 
@@ -146,53 +217,67 @@ description: >-
   <canvas class="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-spot" aria-hidden="true"></div>
 
-  <svg class="hero-chart" viewBox="0 0 400 300" aria-hidden="true">
-    <path class="trend" d="M16,225 C 80,200 140,150 200,140 C 260,130 320,90 382,55" fill="none" stroke-width="1.6" stroke-dasharray="5 5" opacity=".7"/>
-    <g stroke-width="1.5">
-      <line class="up" x1="16" y1="235" x2="16" y2="205"/><rect class="up" x="10" y="210" width="12" height="20" rx="1"/>
-      <line class="down" x1="40" y1="228" x2="40" y2="205"/><rect class="down" x="34" y="210" width="12" height="15" rx="1"/>
-      <line class="up" x1="64" y1="228" x2="64" y2="190"/><rect class="up" x="58" y="195" width="12" height="30" rx="1"/>
-      <line class="down" x1="88" y1="210" x2="88" y2="190"/><rect class="down" x="82" y="195" width="12" height="10" rx="1"/>
-      <line class="up" x1="112" y1="208" x2="112" y2="168"/><rect class="up" x="106" y="170" width="12" height="35" rx="1"/>
-      <line class="down" x1="136" y1="185" x2="136" y2="165"/><rect class="down" x="130" y="170" width="12" height="10" rx="1"/>
-      <line class="up" x1="160" y1="182" x2="160" y2="148"/><rect class="up" x="154" y="150" width="12" height="30" rx="1"/>
-      <line class="down" x1="184" y1="165" x2="184" y2="145"/><rect class="down" x="178" y="150" width="12" height="10" rx="1"/>
-      <line class="up" x1="208" y1="162" x2="208" y2="128"/><rect class="up" x="202" y="130" width="12" height="30" rx="1"/>
-      <line class="down" x1="232" y1="145" x2="232" y2="125"/><rect class="down" x="226" y="130" width="12" height="10" rx="1"/>
-      <line class="up" x1="256" y1="142" x2="256" y2="108"/><rect class="up" x="250" y="110" width="12" height="30" rx="1"/>
-      <line class="down" x1="280" y1="125" x2="280" y2="105"/><rect class="down" x="274" y="110" width="12" height="10" rx="1"/>
-      <line class="up" x1="304" y1="122" x2="304" y2="90"/><rect class="up" x="298" y="92" width="12" height="28" rx="1"/>
-      <line class="down" x1="328" y1="108" x2="328" y2="88"/><rect class="down" x="322" y="92" width="12" height="10" rx="1"/>
-      <line class="up" x1="352" y1="105" x2="352" y2="70"/><rect class="up" x="346" y="72" width="12" height="30" rx="1"/>
-      <line class="up" x1="376" y1="88" x2="376" y2="53"/><rect class="up" x="370" y="55" width="12" height="30" rx="1"/>
-    </g>
-  </svg>
-
   <div class="wrap">
-    <div class="hero-inner">
-      <span class="hero-badge"><span class="dot"></span> Algorithmic trading systems &amp; AI agents</span>
+    <div class="hero-grid">
+      <div class="hero-inner">
+        <span class="hero-badge"><span class="dot"></span> Algorithmic trading systems &amp; AI agents</span>
 
-      <h1 class="hero-title">
-        <span class="line"><span class="line-inner">Your strategy.</span></span>
-        <span class="line"><span class="line-inner grad-text animate-grad">Built to run itself.</span></span>
-      </h1>
+        <h1 class="hero-title">
+          <span class="line"><span class="line-inner">Your strategy.</span></span>
+          <span class="line"><span class="line-inner grad-text animate-grad">Built to run itself.</span></span>
+        </h1>
 
-      <p class="hero-sub">
-        I build and operate <strong>production trading systems and AI trading agents</strong> —
-        index F&amp;O, equities, crypto derivatives, or whatever you trade. The execution layer,
-        the agentic monitoring that watches it, the backtests that prove it works, and the
-        safety engineering that makes live order flow something you can actually sleep through.
-      </p>
+        <p class="hero-sub">
+          Production trading systems and <strong>AI trading agents</strong> — index F&amp;O,
+          equities, crypto derivatives, or whatever you trade.
+        </p>
 
-      <div class="hero-cta">
-        <a href="#work-with-me" class="btn btn--primary magnetic">Work with me</a>
-        <a href="#how" class="btn btn--ghost">How I work</a>
+        <div class="hero-cta">
+          <a href="#work-with-me" class="btn btn--primary magnetic">Work with me</a>
+          <a href="#how" class="btn btn--ghost">How I work</a>
+        </div>
       </div>
 
-      <div class="hero-meta">
-        <div class="item"><div class="n"><span data-count="10">10</span></div><div class="l">Broker &amp; venue integrations</div></div>
-        <div class="item"><div class="n">Tick</div><div class="l">Level backtesting</div></div>
-        <div class="item"><div class="n">24×7</div><div class="l">Crypto markets too</div></div>
+      <div>
+        <div class="console" aria-hidden="true">
+          <div class="console-bar">
+            <span class="cdot"></span><span class="cdot"></span><span class="cdot"></span>
+            <span class="console-name">execution-engine</span>
+            <span class="console-live"><i></i> LIVE</span>
+          </div>
+
+          <div class="console-tiles">
+            <div class="ctile"><span class="cl">STATE</span><div class="cv">IN_POSITION</div></div>
+            <div class="ctile"><span class="cl">FEED</span><div class="cv ok">OK · 40ms</div></div>
+            <div class="ctile"><span class="cl">LEGS</span><div class="cv">2 · hedged</div></div>
+          </div>
+
+          <svg class="console-chart" viewBox="0 0 420 88" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="cfill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="var(--accent)" stop-opacity=".28"/>
+                <stop offset="1" stop-color="var(--accent)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,64 L26,58 L52,66 L78,49 L104,55 L130,42 L156,47 L182,33 L208,39 L234,30 L260,44 L286,36 L312,25 L338,31 L364,20 L390,26 L420,16 L420,88 L0,88 Z" fill="url(#cfill)"/>
+            <polyline points="0,64 26,58 52,66 78,49 104,55 130,42 156,47 182,33 208,39 234,30 260,44 286,36 312,25 338,31 364,20 390,26 420,16"
+                      fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/>
+          </svg>
+
+          <div class="clog">
+            <div><span class="ct">09:20:03</span> <span class="cok">FILL</span> 24500CE ×2 @ 118.40</div>
+            <div><span class="ct">09:34:11</span> <span class="cok">HEDGE</span> 24700CE ×2 placed</div>
+            <div><span class="ct">11:02:47</span> <span class="cwarn">WARN</span> tick gap 1.4s — halt armed</div>
+            <div><span class="ct">11:02:49</span> <span class="cok">RESUME</span> feed recovered</div>
+          </div>
+
+          <div class="console-foot">
+            <span class="cf">LOSS CAP</span>
+            <span class="cbar"><i></i></span>
+            <span class="cf carmed">KILL SWITCH ARMED</span>
+          </div>
+        </div>
+        <p class="console-cap">// illustrative system view — not a performance record</p>
       </div>
     </div>
   </div>
@@ -200,17 +285,64 @@ description: >-
   <div class="hero-scroll" aria-hidden="true"><span class="bar"></span> scroll</div>
 </section>
 
+<!-- ============================ VENUE MARQUEE ============================ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Fyers</span>
+    <span class="marquee-item">Zerodha</span>
+    <span class="marquee-item">Upstox</span>
+    <span class="marquee-item">Angel One</span>
+    <span class="marquee-item">Dhan</span>
+    <span class="marquee-item">Groww</span>
+    <span class="marquee-item">Kotak Neo</span>
+    <span class="marquee-item">Nirmal Bang</span>
+    <span class="marquee-item">Delta Exchange</span>
+    <span class="marquee-item">Deribit</span>
+    <!-- duplicate set for a seamless loop -->
+    <span class="marquee-item">Fyers</span>
+    <span class="marquee-item">Zerodha</span>
+    <span class="marquee-item">Upstox</span>
+    <span class="marquee-item">Angel One</span>
+    <span class="marquee-item">Dhan</span>
+    <span class="marquee-item">Groww</span>
+    <span class="marquee-item">Kotak Neo</span>
+    <span class="marquee-item">Nirmal Bang</span>
+    <span class="marquee-item">Delta Exchange</span>
+    <span class="marquee-item">Deribit</span>
+  </div>
+</div>
+<div class="marquee marquee--rev" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">NIFTY</span>
+    <span class="marquee-item">BANKNIFTY</span>
+    <span class="marquee-item">FINNIFTY</span>
+    <span class="marquee-item">MIDCPNIFTY</span>
+    <span class="marquee-item">SENSEX</span>
+    <span class="marquee-item">BANKEX</span>
+    <span class="marquee-item">Perpetuals</span>
+    <span class="marquee-item">Implied Volatility</span>
+    <span class="marquee-item">Greeks</span>
+    <span class="marquee-item">Tick Replay</span>
+    <!-- duplicate set for a seamless loop -->
+    <span class="marquee-item">NIFTY</span>
+    <span class="marquee-item">BANKNIFTY</span>
+    <span class="marquee-item">FINNIFTY</span>
+    <span class="marquee-item">MIDCPNIFTY</span>
+    <span class="marquee-item">SENSEX</span>
+    <span class="marquee-item">BANKEX</span>
+    <span class="marquee-item">Perpetuals</span>
+    <span class="marquee-item">Implied Volatility</span>
+    <span class="marquee-item">Greeks</span>
+    <span class="marquee-item">Tick Replay</span>
+  </div>
+</div>
+
 <!-- ============================ THE GAP ============================ -->
-<section class="section section--alt" id="gap">
+<section class="section" id="gap">
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Why this is hard to hire for</span>
       <h2 class="section-title">Two skills that rarely sit in one person</h2>
-      <p class="section-lead">
-        Plenty of developers can write code. Plenty of traders understand options.
-        The intersection — someone who can hold both a Greeks-aware strategy and a
-        fault-tolerant execution system in their head at once — is genuinely narrow.
-      </p>
     </div>
 
     <div class="equation" data-reveal>
@@ -219,11 +351,7 @@ description: >-
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
         </div>
         <h3>A developer alone</h3>
-        <p>
-          Ships something that works on the happy path. Misses that a stalled feed still
-          returns a price, that a retried order can double your position, and that most of
-          your strategy's states never occur on the day they tested it.
-        </p>
+        <p>Ships the happy path — and misses that a stalled feed still returns a price.</p>
       </div>
 
       <span class="eq-op" aria-hidden="true">+</span>
@@ -233,11 +361,7 @@ description: >-
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
         </div>
         <h3>A trader alone</h3>
-        <p>
-          Knows exactly what the strategy should do, and has no way to prove the code does it.
-          Ends up supervising an automation manually — which is most of the cost of trading it
-          by hand, with none of the confidence.
-        </p>
+        <p>Knows what the strategy should do, with no way to prove the code does it.</p>
       </div>
     </div>
 
@@ -250,17 +374,13 @@ description: >-
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
       </div>
       <h3>What I do</h3>
-      <p>
-        Take a strategy you already trade, turn it into a system that executes it exactly,
-        and prove that it does — with replayable tests over historical ticks, not
-        a week of hoping.
-      </p>
+      <p>Turn a strategy you already trade into a system that executes it exactly — and prove it does, over replayed historical ticks.</p>
     </div>
   </div>
 </section>
 
 <!-- ============================ WHAT I BUILD ============================ -->
-<section class="section" id="build">
+<section class="section section--alt" id="build">
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Services</span>
@@ -293,56 +413,77 @@ description: >-
       <article class="card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><circle cx="4" cy="13" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="20" cy="14" r="2"/></svg></div>
         <h3>Strategy automation</h3>
-        <p>Your rules, running unattended — entries, exits, re-entries, hedges, position sizing, and the state machine that ties them together.</p>
-        <div class="tags"><span class="tag">state machines</span><span class="tag">order routing</span></div>
+        <p>Your rules, running unattended.</p>
+        <div class="tags"><span class="tag">state machines</span><span class="tag">order routing</span><span class="tag">re-entries</span><span class="tag">hedges</span><span class="tag">sizing</span></div>
       </article>
 
       <article class="card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2v6.5L4.5 17a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L15 8.5V2"/><path d="M9 2h6M8 14h8"/></svg></div>
         <h3>Backtesting &amp; validation</h3>
-        <p>Tick-level and minute-level engines over years of historical data, so a rule change is evaluated before it's traded, not after.</p>
-        <div class="tags"><span class="tag">tick data</span><span class="tag">walk-forward</span></div>
+        <p>Rule changes evaluated before they're traded.</p>
+        <div class="tags"><span class="tag">tick data</span><span class="tag">walk-forward</span><span class="tag">minute OHLC</span></div>
       </article>
 
       <article class="card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v4M15 3v4M6 7h12l-1 5a5 5 0 0 1-10 0L6 7Z"/><path d="M10 16v2a2 2 0 0 0 4 0v-2"/></svg></div>
         <h3>Broker &amp; API integration</h3>
-        <p>Authentication, live quote streams, order placement, fills, and position reconciliation — across multiple brokers, with the failure modes handled.</p>
-        <div class="tags"><span class="tag">websockets</span><span class="tag">reconciliation</span></div>
+        <p>Ten venues, with the failure modes handled.</p>
+        <div class="tags"><span class="tag">websockets</span><span class="tag">reconciliation</span><span class="tag">rate limits</span><span class="tag">auth</span></div>
       </article>
 
       <article class="card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>Monitoring &amp; controls</h3>
-        <p>A live view of what the system is doing and why, plus the kill switch, loss caps, and square-off controls you'd want at 2:45pm on a bad day.</p>
-        <div class="tags"><span class="tag">dashboards</span><span class="tag">alerting</span></div>
+        <p>What you want at 2:45pm on a bad day.</p>
+        <div class="tags"><span class="tag">kill switch</span><span class="tag">loss caps</span><span class="tag">square-off</span><span class="tag">alerting</span></div>
       </article>
 
       <article class="card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></div>
         <h3>AI trading agents</h3>
-        <p>LLM-assisted and agentic layers on top of the execution engine — natural-language strategy specs, regime and anomaly detection, and autonomous agents that watch positions and escalate instead of a human staring at a screen all day.</p>
-        <div class="tags"><span class="tag">LLM agents</span><span class="tag">agentic AI</span><span class="tag">MCP</span></div>
+        <p>Agents that watch positions and escalate — instead of you watching a screen.</p>
+        <div class="tags"><span class="tag">LLM agents</span><span class="tag">agentic AI</span><span class="tag">MCP</span><span class="tag">anomaly detection</span></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ============================ STACK ============================ -->
-<section class="section section--alt" id="stack">
+<!-- ============================ STAT BAND ============================ -->
+<div class="statband">
   <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Depth</span>
-      <h2 class="section-title">The ground I actually work on</h2>
-      <p class="section-lead">
-        Deepest in index options, because that's the day job. But the execution machinery
-        is instrument-agnostic — if a market has an API and a data feed, the same engineering
-        applies, and I've already shipped it well outside equities.
-      </p>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text"><span data-count="10">10</span></div>
+      <div class="sl">Broker &amp; venue integrations</div>
     </div>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text"><span data-count="6">6</span></div>
+      <div class="sl">Index derivatives covered</div>
+    </div>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text">24×7</div>
+      <div class="sl">Crypto markets, no session close</div>
+    </div>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text"><span data-count="7" data-suffix="+">7+</span></div>
+      <div class="sl">Years shipping production software</div>
+    </div>
+  </div>
+</div>
 
-    <div class="radar-wrap" data-reveal>
-      <svg class="radar-svg" viewBox="0 0 400 340" role="img" aria-label="Depth radar across F&O options, crypto, data, engineering, AI agents, and broker integrations, all rated high">
+<!-- ============================ STACK ============================ -->
+<section class="section" id="stack">
+  <div class="wrap">
+    <div class="radar-split">
+      <div class="section-head" data-reveal style="margin-bottom:0">
+        <span class="eyebrow">Depth</span>
+        <h2 class="section-title">The ground I actually work on</h2>
+        <p class="section-lead">
+          Deepest in index options — that's the day job. But the execution machinery is
+          instrument-agnostic: if a market has an API and a feed, the same engineering applies.
+        </p>
+      </div>
+
+      <svg class="radar-svg" data-reveal viewBox="0 0 400 340" role="img" aria-label="Depth radar across F&O options, crypto, data, engineering, AI agents, and broker integrations">
         <polygon points="200,50 303.9,110 303.9,230 200,290 96.1,230 96.1,110" fill="none" stroke="var(--line)"/>
         <polygon points="200,90 269.3,130 269.3,210 200,250 130.7,210 130.7,130" fill="none" stroke="var(--line)"/>
         <polygon points="200,130 234.6,150 234.6,190 200,210 165.4,190 165.4,150" fill="none" stroke="var(--line)"/>
@@ -372,7 +513,7 @@ description: >-
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
         <h3>Indian F&amp;O</h3>
-        <p>Index derivatives on NSE and BSE, weekly and monthly expiries, with the lot sizes and strike intervals that go with each.</p>
+        <p>NSE + BSE index derivatives, weekly and monthly expiries.</p>
         <div class="tags">
           <span class="tag">NIFTY</span><span class="tag">BANKNIFTY</span><span class="tag">FINNIFTY</span>
           <span class="tag">MIDCPNIFTY</span><span class="tag">SENSEX</span><span class="tag">BANKEX</span>
@@ -382,55 +523,54 @@ description: >-
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M8 9h5M8 15h5"/></svg></div>
         <h3>Crypto derivatives</h3>
-        <p>Perpetuals and options via Delta Exchange and Deribit. Markets that never close, which breaks every assumption a system built around a 9:15–3:30 session quietly made.</p>
+        <p>Markets that never close.</p>
+        <div class="tags"><span class="tag">Delta Exchange</span><span class="tag">Deribit</span><span class="tag">perpetuals</span><span class="tag">funding rates</span></div>
       </div>
 
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></div>
         <h3>Your market</h3>
-        <p>Equities, futures, commodities, FX — the state machine, order manager, reconciliation and safety layer don't care what the instrument is. Only the venue adapter and the contract maths change.</p>
-      </div>
-
-      <div class="stack-block card" data-reveal>
-        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 15 15 9M8 12a4 4 0 0 1 0-5.6l2-2a4 4 0 0 1 5.6 5.6l-1 1M16 12a4 4 0 0 1 0 5.6l-2 2a4 4 0 0 1-5.6-5.6l1-1"/></svg></div>
-        <h3>Venues</h3>
-        <p>Each with its own auth model, rate limits, and quirks that only surface in production.</p>
-        <div class="tags">
-          <span class="tag">Fyers</span><span class="tag">Zerodha</span><span class="tag">Upstox</span>
-          <span class="tag">Angel One</span><span class="tag">Dhan</span><span class="tag">Groww</span>
-          <span class="tag">Kotak Neo</span><span class="tag">Nirmal Bang</span><span class="tag">Delta</span><span class="tag">Deribit</span>
-        </div>
+        <p>Only the venue adapter and contract maths change.</p>
+        <div class="tags"><span class="tag">equities</span><span class="tag">futures</span><span class="tag">commodities</span><span class="tag">FX</span></div>
       </div>
 
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4 3 20h18L12 4Z"/></svg></div>
         <h3>Derivatives craft</h3>
-        <p>Implied volatility, Greeks, straddle and strangle premium behaviour, time decay curves, expiry dynamics, funding rates, and volatility regime classification.</p>
+        <div class="tags">
+          <span class="tag">implied volatility</span><span class="tag">Greeks</span><span class="tag">straddles</span>
+          <span class="tag">strangles</span><span class="tag">time decay</span><span class="tag">expiry dynamics</span><span class="tag">vol regimes</span>
+        </div>
       </div>
 
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
         <h3>Data</h3>
-        <p>Years of tick and minute OHLC across indices, strikes and expiries — the raw material that makes a backtest mean something.</p>
+        <p>Years of tick and minute OHLC across strikes and expiries.</p>
       </div>
 
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4 3 12l5 8M16 4l5 8-5 8"/></svg></div>
         <h3>Engineering</h3>
-        <p>Python execution engines, event-driven architecture, deterministic replay harnesses, PostgreSQL, FastAPI, cloud deployment, and CI that gates on real tests.</p>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span>
+          <span class="tag">event-driven</span><span class="tag">replay harness</span><span class="tag">CI</span>
+        </div>
       </div>
 
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></div>
         <h3>AI &amp; agentic tooling</h3>
-        <p>LLMs and agentic workflows via the Model Context Protocol, applied to trading — autonomous decision agents, machine-learning regime classification, and generative tooling for research and reporting.</p>
+        <div class="tags">
+          <span class="tag">LLM agents</span><span class="tag">MCP</span><span class="tag">regime classification</span><span class="tag">GenAI reporting</span>
+        </div>
       </div>
 
       <div class="stack-block card" data-reveal>
         <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg></div>
         <h3>Also shipped</h3>
         <p>
-          <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform for ATM straddle premium and IV, built and operated end to end.
+          <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — live options analytics, built and run end to end.
           <svg class="spark" width="56" height="20" viewBox="0 0 56 20" aria-hidden="true"><polyline points="0,16 8,12 16,14 24,6 32,9 40,3 48,7 56,2" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </p>
       </div>
@@ -439,16 +579,11 @@ description: >-
 </section>
 
 <!-- ============================ HOW I WORK ============================ -->
-<section class="section" id="how">
+<section class="section section--alt" id="how">
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Principles</span>
       <h2 class="section-title">How I work</h2>
-      <p class="section-lead">
-        This is the part that matters. Anyone can write the entry logic — the difference
-        between an automation you trust and one you babysit is entirely in the discipline
-        around it.
-      </p>
     </div>
 
     <div class="flow" data-reveal>
@@ -458,7 +593,7 @@ description: >-
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg>
         </div>
         <h3>Replay</h3>
-        <p>Every rule proven against recorded market data, replayed deterministically — same input, same output, every time. Every state a strategy can hit is constructed and tested on purpose, not just the ones that happened to occur.</p>
+        <p>Recorded market data, replayed deterministically. Every state tested on purpose — not just the ones that happened.</p>
       </div>
 
       <div class="flow-connector" aria-hidden="true">
@@ -471,7 +606,7 @@ description: >-
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
         </div>
         <h3>Paper</h3>
-        <p>Live market data, simulated orders. The system behaves exactly as it will in production — the only thing missing is real money on the line.</p>
+        <p>Live data, simulated orders. Production behaviour, no money at risk.</p>
       </div>
 
       <div class="flow-connector" aria-hidden="true">
@@ -484,23 +619,23 @@ description: >-
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.48M7.76 7.76a6 6 0 0 0 0 8.48M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
         </div>
         <h3>Live</h3>
-        <p>First session at reduced size, someone watching, kill switch armed. Then a staged ramp, with a rollback plan agreed before cutover — not improvised during an incident.</p>
+        <p>Reduced size, kill switch armed, staged ramp — with a rollback plan agreed before cutover.</p>
       </div>
     </div>
 
     <p class="flow-note" data-reveal>
       <strong>Evidence, not assurances.</strong> Every requirement traces to a test, and every test to a
-      recorded, inspectable result — at every stage above. "It works" isn't a deliverable. The proof is.
+      recorded, inspectable result — at every stage above.
     </p>
   </div>
 </section>
 
 <!-- ============================ BACKGROUND ============================ -->
-<section class="section section--alt" id="background">
+<section class="section" id="background">
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Background</span>
-      <h2 class="section-title">Market, code, and AI — where the discipline comes from</h2>
+      <h2 class="section-title">Market, code, and AI</h2>
     </div>
 
     <div class="venn-wrap" data-reveal>
@@ -519,15 +654,15 @@ description: >-
       <div class="venn-captions">
         <div class="venn-cap" data-reveal>
           <span class="dot" style="background:var(--accent)"></span>
-          <div><h3>Market experience</h3><p>Indian index F&amp;O, crypto derivatives, and <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform I built and run.</p></div>
+          <div><h3>Market</h3><p>Indian index F&amp;O, crypto derivatives, and <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — live options analytics I built and run.</p></div>
         </div>
         <div class="venn-cap" data-reveal>
           <span class="dot" style="background:var(--accent-2)"></span>
-          <div><h3>Coding experience</h3><p>7+ years shipping production software — Python, FastAPI, event-driven systems, real CI.</p></div>
+          <div><h3>Code</h3><p>7+ years shipping production software — Python, FastAPI, event-driven systems, real CI.</p></div>
         </div>
         <div class="venn-cap" data-reveal>
           <span class="dot" style="background:var(--accent-3)"></span>
-          <div><h3>AI experience</h3><p>Generative &amp; agentic AI in production — LLM agents, MCP, computer vision.</p></div>
+          <div><h3>AI</h3><p>Generative &amp; agentic AI in production — LLM agents, MCP, computer vision.</p></div>
         </div>
       </div>
     </div>
@@ -549,15 +684,14 @@ description: >-
 </section>
 
 <!-- ============================ CONTACT ============================ -->
-<section class="section contact" id="work-with-me">
+<section class="section section--alt contact" id="work-with-me">
   <div class="wrap">
     <div class="section-head" data-reveal>
       <span class="eyebrow">Get in touch</span>
       <h2 class="section-title">Tell me what you trade</h2>
       <p class="section-lead">
-        The best first message is a description of the strategy you already run manually —
-        entries, exits, and what you wish it did while you weren't watching.
-        I'll tell you honestly whether it's a good fit to automate.
+        Describe the strategy you already run manually — I'll tell you honestly whether
+        it's a good fit to automate.
       </p>
     </div>
 
