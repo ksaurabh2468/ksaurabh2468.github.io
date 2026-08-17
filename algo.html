@@ -99,29 +99,53 @@ description: >-
   /* -- Stack section: pill lists for enumerable items -- */
   .stack-block .tags { margin-top: 1rem; }
 
-  /* -- Background section: divided row instead of boxed cards -- */
-  .experience-row {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    margin-top: 2.2rem; border-top: 1px solid var(--line);
-  }
-  .experience-col { padding: 1.8rem 1.8rem 0 0; border-left: 1px solid var(--line); }
-  .experience-col:first-child { border-left: none; padding-left: 0; }
-  .experience-col:not(:first-child) { padding-left: 1.8rem; }
-  .experience-col h3 {
-    font-family: var(--font-mono); font-size: .78rem; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: .9rem; font-weight: 500;
-  }
-  .experience-col p { color: var(--muted); font-size: .95rem; }
-  @media (max-width: 720px) {
-    .experience-col { border-left: none; padding-left: 0; padding-top: 1.6rem; border-top: 1px solid var(--line); }
-    .experience-col:first-child { border-top: none; padding-top: 0; }
-  }
+  /* -- Background section: Venn diagram instead of text columns -- */
+  .venn-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 2.5rem; margin-top: 2.2rem; }
+  .venn-svg { width: min(100%, 380px); height: auto; flex-shrink: 0; margin-inline: auto; }
+  .venn-captions { flex: 1; min-width: 240px; display: grid; gap: 1.1rem; }
+  .venn-cap { display: flex; align-items: baseline; gap: .7rem; }
+  .venn-cap .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .venn-cap h3 { font-size: .95rem; margin-bottom: .15rem; }
+  .venn-cap p { color: var(--muted); font-size: .88rem; }
+
+  /* -- Hero: decorative candlestick chart -- */
+  .hero-chart { position: absolute; top: 50%; right: 1%; transform: translateY(-50%); width: min(30vw, 380px); opacity: .55; pointer-events: none; z-index: 1; }
+  .hero-chart .up { fill: var(--accent); stroke: var(--accent); }
+  .hero-chart .down { fill: var(--faint); stroke: var(--faint); }
+  .hero-chart .trend { stroke: var(--accent-2); }
+  @media (max-width: 1150px) { .hero-chart { display: none; } }
+
+  /* -- Also shipped: sparkline accent -- */
+  .spark { vertical-align: middle; margin-left: .5rem; }
 </style>
 
 <!-- ============================ HERO ============================ -->
 <section class="hero">
   <canvas class="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-spot" aria-hidden="true"></div>
+
+  <svg class="hero-chart" viewBox="0 0 400 300" aria-hidden="true">
+    <path class="trend" d="M16,225 C 80,200 140,150 200,140 C 260,130 320,90 382,55" fill="none" stroke-width="1.6" stroke-dasharray="5 5" opacity=".7"/>
+    <g stroke-width="1.5">
+      <line class="up" x1="16" y1="235" x2="16" y2="205"/><rect class="up" x="10" y="210" width="12" height="20" rx="1"/>
+      <line class="down" x1="40" y1="228" x2="40" y2="205"/><rect class="down" x="34" y="210" width="12" height="15" rx="1"/>
+      <line class="up" x1="64" y1="228" x2="64" y2="190"/><rect class="up" x="58" y="195" width="12" height="30" rx="1"/>
+      <line class="down" x1="88" y1="210" x2="88" y2="190"/><rect class="down" x="82" y="195" width="12" height="10" rx="1"/>
+      <line class="up" x1="112" y1="208" x2="112" y2="168"/><rect class="up" x="106" y="170" width="12" height="35" rx="1"/>
+      <line class="down" x1="136" y1="185" x2="136" y2="165"/><rect class="down" x="130" y="170" width="12" height="10" rx="1"/>
+      <line class="up" x1="160" y1="182" x2="160" y2="148"/><rect class="up" x="154" y="150" width="12" height="30" rx="1"/>
+      <line class="down" x1="184" y1="165" x2="184" y2="145"/><rect class="down" x="178" y="150" width="12" height="10" rx="1"/>
+      <line class="up" x1="208" y1="162" x2="208" y2="128"/><rect class="up" x="202" y="130" width="12" height="30" rx="1"/>
+      <line class="down" x1="232" y1="145" x2="232" y2="125"/><rect class="down" x="226" y="130" width="12" height="10" rx="1"/>
+      <line class="up" x1="256" y1="142" x2="256" y2="108"/><rect class="up" x="250" y="110" width="12" height="30" rx="1"/>
+      <line class="down" x1="280" y1="125" x2="280" y2="105"/><rect class="down" x="274" y="110" width="12" height="10" rx="1"/>
+      <line class="up" x1="304" y1="122" x2="304" y2="90"/><rect class="up" x="298" y="92" width="12" height="28" rx="1"/>
+      <line class="down" x1="328" y1="108" x2="328" y2="88"/><rect class="down" x="322" y="92" width="12" height="10" rx="1"/>
+      <line class="up" x1="352" y1="105" x2="352" y2="70"/><rect class="up" x="346" y="72" width="12" height="30" rx="1"/>
+      <line class="up" x1="376" y1="88" x2="376" y2="53"/><rect class="up" x="370" y="55" width="12" height="30" rx="1"/>
+    </g>
+  </svg>
+
   <div class="wrap">
     <div class="hero-inner">
       <span class="hero-badge"><span class="dot"></span> Algorithmic trading systems &amp; AI agents</span>
@@ -320,7 +344,10 @@ description: >-
 
       <div class="stack-block card" data-reveal>
         <h3>Also shipped</h3>
-        <p><a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform for ATM straddle premium and IV, built and operated end to end.</p>
+        <p>
+          <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform for ATM straddle premium and IV, built and operated end to end.
+          <svg class="spark" width="56" height="20" viewBox="0 0 56 20" aria-hidden="true"><polyline points="0,16 8,12 16,14 24,6 32,9 40,3 48,7 56,2" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </p>
       </div>
     </div>
   </div>
@@ -391,18 +418,32 @@ description: >-
       <h2 class="section-title">Market, code, and AI — where the discipline comes from</h2>
     </div>
 
-    <div class="experience-row">
-      <div class="experience-col" data-reveal>
-        <h3>Market experience</h3>
-        <p>Deep in Indian index F&amp;O — NIFTY, BANKNIFTY and the rest — plus crypto derivatives on Delta Exchange and Deribit. Also built and operate <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a>, a live options analytics platform tracking ATM straddle premium and IV in real time.</p>
-      </div>
-      <div class="experience-col" data-reveal>
-        <h3>Coding experience</h3>
-        <p>PMP-certified program leader with 7+ years shipping production software — Python execution engines, event-driven systems, FastAPI, PostgreSQL, and the CI/testing discipline that makes an automated system trustworthy, not just functional.</p>
-      </div>
-      <div class="experience-col" data-reveal>
-        <h3>AI experience</h3>
-        <p>Generative and agentic AI in production — LLM-driven decision agents, agentic workflows over the Model Context Protocol, and computer vision systems, applied here to build AI trading agents rather than just automated rule execution.</p>
+    <div class="venn-wrap" data-reveal>
+      <svg class="venn-svg" viewBox="0 0 400 320" role="img" aria-label="Three overlapping circles: Market, Code, and AI, intersecting on AI trading agents">
+        <circle cx="155" cy="140" r="105" fill="var(--accent)" fill-opacity=".16" stroke="var(--accent-line)"/>
+        <circle cx="245" cy="140" r="105" fill="var(--accent-2)" fill-opacity=".16" stroke="var(--accent-line)"/>
+        <circle cx="200" cy="222" r="105" fill="var(--accent-3)" fill-opacity=".16" stroke="var(--accent-line)"/>
+        <text x="88" y="80" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="1" fill="var(--text)">MARKET</text>
+        <text x="312" y="80" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="1" fill="var(--text)">CODE</text>
+        <text x="200" y="305" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="1" fill="var(--text)">AI</text>
+        <text x="200" y="170" text-anchor="middle" font-family="var(--font-display)" font-weight="700" font-size="15" fill="var(--text)">
+          <tspan x="200" dy="0">AI trading</tspan>
+          <tspan x="200" dy="18">agents</tspan>
+        </text>
+      </svg>
+      <div class="venn-captions">
+        <div class="venn-cap" data-reveal>
+          <span class="dot" style="background:var(--accent)"></span>
+          <div><h3>Market experience</h3><p>Indian index F&amp;O, crypto derivatives, and <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — a live options analytics platform I built and run.</p></div>
+        </div>
+        <div class="venn-cap" data-reveal>
+          <span class="dot" style="background:var(--accent-2)"></span>
+          <div><h3>Coding experience</h3><p>7+ years shipping production software — Python, FastAPI, event-driven systems, real CI.</p></div>
+        </div>
+        <div class="venn-cap" data-reveal>
+          <span class="dot" style="background:var(--accent-3)"></span>
+          <div><h3>AI experience</h3><p>Generative &amp; agentic AI in production — LLM agents, MCP, computer vision.</p></div>
+        </div>
       </div>
     </div>
 
