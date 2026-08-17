@@ -1,378 +1,743 @@
 ---
 layout: default
-title: Home
+title: Algorithmic Trading Systems & AI Agents
+tagline: Algorithmic Trading Systems & AI Agents
+description: >-
+  Kumar Saurabh — I build and operate production algorithmic trading systems and AI trading
+  agents across equities, F&O and crypto derivatives. Strategy automation, agentic execution,
+  LLM-assisted decisioning, tick-level backtesting, multi-venue execution, and the safety
+  engineering that makes live order flow trustworthy.
 ---
+
+<style>
+  /* ========== scoped to this page only ========== */
+
+  /* -- Hero: two-column with a console mockup -- */
+  .hero-grid {
+    display: grid; grid-template-columns: 1.04fr .96fr;
+    gap: clamp(2rem, 4vw, 3.6rem); align-items: center;
+  }
+  @media (max-width: 1040px) { .hero-grid { grid-template-columns: 1fr; } }
+  /* title is sized for a full-width hero upstream; rein it in for the 2-col layout */
+  .hero-grid .hero-title { font-size: clamp(2rem, 4vw, 3.2rem); }
+  .hero-grid .hero-sub { font-size: clamp(1rem, 1.6vw, 1.12rem); }
+
+  /* -- Console mockup (operational telemetry, not performance) -- */
+  .console {
+    position: relative; z-index: 2;
+    border: 1px solid var(--line-strong); border-radius: 14px; overflow: hidden;
+    background: linear-gradient(170deg, var(--surface-2), var(--bg-2));
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,.9), var(--glow);
+    font-family: var(--font-mono);
+  }
+  .console-bar {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .7rem .9rem; border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.02);
+  }
+  .console-bar .cdot { width: 9px; height: 9px; border-radius: 50%; background: var(--line-strong); }
+  .console-name { margin-left: .5rem; font-size: .72rem; color: var(--faint); letter-spacing: .06em; }
+  .console-live {
+    margin-left: auto; display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .66rem; letter-spacing: .14em; color: var(--accent);
+    border: 1px solid var(--accent-line); background: var(--accent-soft);
+    padding: .2rem .55rem; border-radius: 999px;
+  }
+  .console-live i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s var(--ease) infinite; }
+
+  /* stage strip: mirrors the replay -> paper -> live pipeline */
+  .console-stages {
+    display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+    padding: .6rem .9rem; border-bottom: 1px solid var(--line);
+  }
+  .cstage {
+    display: inline-flex; align-items: center; gap: .35rem;
+    font-size: .62rem; letter-spacing: .12em; color: var(--faint);
+    border: 1px solid var(--line); border-radius: 999px; padding: .22rem .55rem;
+  }
+  .cstage.done { color: var(--muted); }
+  .cstage.now { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+  .cstage.now i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse 2s var(--ease) infinite; }
+  .console-stages .csep { color: var(--line-strong); font-size: .7rem; }
+
+  /* two panes: what was proven, and what is running */
+  .console-split { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+  .cpane { padding: .8rem .9rem; border-left: 1px solid var(--line); }
+  .cpane:first-child { border-left: none; }
+  .cpane .cl { font-size: .58rem; letter-spacing: .13em; color: var(--faint); display: block; margin-bottom: .5rem; }
+  .crow { display: flex; justify-content: space-between; gap: .6rem; font-size: .68rem; padding: .16rem 0; }
+  .crow span { color: var(--faint); }
+  .crow b { color: var(--text); font-weight: 500; }
+  .crow b.ok { color: var(--accent); }
+  @media (max-width: 520px) {
+    .cpane { padding: .7rem .65rem; }
+    .crow { font-size: .62rem; }
+  }
+
+  .console-chart { display: block; width: 100%; height: 88px; border-bottom: 1px solid var(--line); }
+
+  .clog { padding: .7rem .9rem; display: grid; gap: .38rem; }
+  .clog div { font-size: .68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .clog .ct { color: var(--faint); }
+  .clog .cok { color: var(--accent); }
+  .clog .cwarn { color: #f5b544; }
+
+  .console-foot {
+    display: flex; align-items: center; gap: .7rem;
+    padding: .65rem .9rem; border-top: 1px solid var(--line); background: rgba(255,255,255,.02);
+  }
+  .cbar { flex: 1; height: 4px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .cbar i { display: block; height: 100%; width: 38%; border-radius: 999px; background: var(--grad); }
+  .console-foot .cf { font-size: .62rem; letter-spacing: .1em; color: var(--faint); }
+  .console-foot .carmed { color: var(--accent); }
+  .console-cap { margin-top: .7rem; font-size: .68rem; color: var(--faint); font-family: var(--font-mono); text-align: right; }
+
+  /* -- Stat band: big numbers, fast absorption -- */
+  .statband { border-block: 1px solid var(--line); background: var(--bg-2); }
+  .statband .wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .statcell { padding: clamp(1.6rem, 3.5vw, 2.6rem) 1.2rem; border-left: 1px solid var(--line); }
+  .statcell:first-child { border-left: none; }
+  .statcell .sn {
+    font-family: var(--font-display); font-weight: 700; letter-spacing: -.03em;
+    font-size: clamp(2.2rem, 5.5vw, 3.4rem); line-height: 1;
+  }
+  .statcell .sl { margin-top: .5rem; font-size: .78rem; color: var(--faint); letter-spacing: .03em; }
+  @media (max-width: 620px) {
+    .statcell { border-left: none; border-top: 1px solid var(--line); }
+    .statcell:first-child { border-top: none; }
+  }
+
+  /* -- Gap section: equation layout -- */
+  .equation { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.4rem; align-items: stretch; margin-top: 2rem; }
+  .eq-side { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; }
+  .eq-side .card-ico {
+    width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; margin-bottom: 1rem;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+  }
+  .eq-side h3 { margin-bottom: .5rem; }
+  .eq-side p { color: var(--muted); font-size: .94rem; }
+  .eq-op {
+    font-family: var(--font-mono); font-size: 1.6rem; color: var(--faint);
+    display: grid; place-items: center; align-self: center;
+  }
+  .eq-arrow { display: flex; align-items: center; justify-content: center; gap: .8rem; margin: 1.4rem 0; color: var(--faint); }
+  .eq-arrow::before, .eq-arrow::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+  .eq-arrow svg { flex-shrink: 0; }
+  .eq-result {
+    border: 1px solid var(--accent-line); border-radius: var(--radius); padding: 2rem;
+    background: linear-gradient(160deg, var(--accent-soft), transparent 70%), var(--surface);
+    box-shadow: var(--glow);
+  }
+  .eq-result .card-ico {
+    width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; margin-bottom: 1.1rem;
+    color: var(--accent); border: 1px solid var(--accent-line); background: var(--accent-soft);
+  }
+  .eq-result.card:hover {
+    border-color: var(--accent-line);
+    background: linear-gradient(160deg, var(--accent-soft), transparent 70%), var(--surface-2);
+  }
+  .eq-result h3 { font-size: 1.2rem; margin-bottom: .5rem; }
+  .eq-result p { color: var(--muted); font-size: 1rem; max-width: 60ch; }
+  @media (max-width: 720px) {
+    .equation { grid-template-columns: 1fr; }
+    .eq-op { transform: rotate(90deg); padding: .4rem 0; }
+  }
+
+  /* -- Build section: architecture chain diagram -- */
+  .chain { display: flex; align-items: center; justify-content: center; gap: .7rem; margin-top: 2rem; flex-wrap: wrap; }
+  .chain-node { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
+  .chain-ico {
+    width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+  }
+  .chain-node span {
+    font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .chain-arrow { color: var(--faint); flex-shrink: 0; }
+  @media (max-width: 620px) {
+    .chain { flex-direction: column; }
+    .chain-arrow { transform: rotate(90deg); }
+  }
+
+  /* -- Stack grid -- */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
+  .stack-block { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; background: var(--surface); }
+  .stack-block h3 {
+    font-family: var(--font-mono); font-size: .76rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: .9rem; font-weight: 500;
+  }
+  .stack-block p { color: var(--muted); font-size: .95rem; }
+  .stack-block .tags { margin-top: 1rem; }
+
+  /* -- Stack: radar chart, side by side with the lead -- */
+  .radar-split { display: grid; grid-template-columns: 1fr auto; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+  .radar-svg { width: min(100%, 400px); height: auto; }
+  .radar-svg text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; fill: var(--faint); }
+  @media (max-width: 900px) { .radar-split { grid-template-columns: 1fr; } .radar-svg { margin-inline: auto; } }
+
+  /* -- How I work: pipeline diagram -- */
+  .flow { display: flex; align-items: stretch; gap: 0; margin-top: 2rem; }
+  .flow-step {
+    flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1.6rem 1.4rem;
+  }
+  .flow-step .flow-no {
+    font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint);
+  }
+  .flow-step .flow-ico {
+    width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent);
+    margin: .9rem 0 1rem;
+  }
+  .flow-step h3 { font-size: 1.02rem; margin-bottom: .4rem; }
+  .flow-step p { color: var(--muted); font-size: .87rem; }
+  .flow-step--live {
+    background: linear-gradient(160deg, var(--accent-soft), transparent 70%), var(--surface);
+    border-color: var(--accent-line); box-shadow: var(--glow);
+  }
+  .flow-step--live .flow-no { color: var(--accent); }
+  .flow-connector { display: flex; align-items: center; justify-content: center; width: 40px; flex-shrink: 0; color: var(--faint); }
+  .flow-note {
+    margin-top: 1.8rem; border-left: 2px solid var(--line-strong);
+    padding: .1rem 0 .1rem 1.2rem; max-width: 68ch; color: var(--faint); font-size: .9rem;
+  }
+  .flow-note strong { color: var(--muted); font-weight: 600; }
+  @media (max-width: 860px) {
+    .flow { flex-direction: column; gap: 1rem; }
+    .flow-connector { width: auto; height: 28px; transform: rotate(90deg); align-self: center; }
+  }
+
+  /* -- Background: Venn diagram -- */
+  .venn-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 2.5rem; margin-top: 2.2rem; }
+  .venn-svg { width: min(100%, 380px); height: auto; flex-shrink: 0; margin-inline: auto; }
+  .venn-captions { flex: 1; min-width: 240px; display: grid; gap: 1.1rem; }
+  .venn-cap { display: flex; align-items: baseline; gap: .7rem; }
+  .venn-cap .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .venn-cap h3 { font-size: .95rem; margin-bottom: .15rem; }
+  .venn-cap p { color: var(--muted); font-size: .88rem; }
+
+  .honest {
+    margin-top: 2.4rem; border-left: 2px solid var(--line-strong);
+    padding: .2rem 0 .2rem 1.4rem; max-width: 68ch;
+  }
+  .honest p { color: var(--faint); font-size: .9rem; }
+  .honest p + p { margin-top: .7rem; }
+  .honest strong { color: var(--muted); font-weight: 600; }
+
+  .spark { vertical-align: middle; margin-left: .5rem; }
+</style>
 
 <!-- ============================ HERO ============================ -->
 <section class="hero">
   <canvas class="hero-canvas" aria-hidden="true"></canvas>
   <div class="hero-spot" aria-hidden="true"></div>
+
   <div class="wrap">
-    <div class="hero-inner">
-      <span class="hero-badge" data-hero style="animation-delay:.05s">
-        <span class="dot"></span> PMP-certified · AI Program Leader · Pune, India
-      </span>
+    <div class="hero-grid">
+      <div class="hero-inner">
+        <span class="hero-badge"><span class="dot"></span> Algorithmic trading systems &amp; AI agents</span>
 
-      <h1 class="hero-title">
-        <span class="line"><span class="line-inner" style="animation-delay:.15s">Turning ambitious</span></span>
-        <span class="line"><span class="line-inner grad-text animate-grad" style="animation-delay:.3s">AI ideas into</span></span>
-        <span class="line"><span class="line-inner" style="animation-delay:.45s">products that ship.</span></span>
-      </h1>
+        <h1 class="hero-title">
+          <span class="line"><span class="line-inner">Your strategy.</span></span>
+          <span class="line"><span class="line-inner grad-text animate-grad">Built to run itself.</span></span>
+        </h1>
 
-      <p class="hero-sub" data-hero style="animation-delay:.5s">
-        I'm <strong>Kumar Saurabh</strong> — a program leader pairing an MBA in Business Analytics
-        with hands-on AI delivery. I take computer vision, generative &amp; agentic AI from
-        idea to production, aligning the people, budgets and roadmaps that get them there.
-      </p>
+        <p class="hero-sub">
+          Production trading systems and <strong>AI trading agents</strong> — index F&amp;O,
+          equities, crypto derivatives, or whatever you trade.
+        </p>
 
-      <div class="hero-roles" data-hero style="animation-delay:.58s" aria-hidden="true">
-        <span class="prefix">Focus</span>
-        <span class="rotator" data-words='["Computer Vision","Generative AI","Agentic AI","Decision Automation","Program Leadership"]'>
-          <span class="rw">Computer Vision</span>
-        </span>
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn--primary magnetic">Work with me</a>
+          <a href="#how" class="btn btn--ghost">How I work</a>
+        </div>
       </div>
 
-      <div class="hero-cta" data-hero style="animation-delay:.65s">
-        <a href="#work" class="btn btn--primary magnetic">See my work <span class="arrow">→</span></a>
-        <a href="#contact" class="btn btn--ghost">Let's connect</a>
-      </div>
+      <div>
+        <div class="console" aria-hidden="true">
+          <div class="console-bar">
+            <span class="cdot"></span><span class="cdot"></span><span class="cdot"></span>
+            <span class="console-name">execution-engine</span>
+            <span class="console-live"><i></i> LIVE</span>
+          </div>
 
-      <div class="hero-meta" data-hero style="animation-delay:.8s">
-        <div class="item"><div class="n"><span data-count="7" data-suffix="+">7+</span></div><div class="l">Years delivering</div></div>
-        <div class="item"><div class="n"><span data-count="99" data-suffix="%">99%</span></div><div class="l">CV defect accuracy</div></div>
-        <div class="item"><div class="n">AI</div><div class="l">From PoC → production</div></div>
-        <div class="item"><div class="n">1</div><div class="l">Published research paper</div></div>
+          <div class="console-stages">
+            <span class="cstage done">✓ BACKTESTED</span>
+            <span class="csep">→</span>
+            <span class="cstage done">✓ PAPER TRADED</span>
+            <span class="csep">→</span>
+            <span class="cstage now"><i></i> LIVE</span>
+          </div>
+
+          <div class="console-split">
+            <div class="cpane">
+              <span class="cl">BACKTEST</span>
+              <div class="crow"><span>period</span><b>2019–2025</b></div>
+              <div class="crow"><span>data</span><b>tick replay</b></div>
+              <div class="crow"><span>states</span><b class="ok">all covered</b></div>
+            </div>
+            <div class="cpane">
+              <span class="cl">LIVE EXECUTION</span>
+              <div class="crow"><span>strategy</span><b class="ok">running</b></div>
+              <div class="crow"><span>position</span><b>hedged</b></div>
+              <div class="crow"><span>orders today</span><b>14 filled</b></div>
+            </div>
+          </div>
+
+          <svg class="console-chart" viewBox="0 0 420 88" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="cfill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="var(--accent)" stop-opacity=".28"/>
+                <stop offset="1" stop-color="var(--accent)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,64 L26,58 L52,66 L78,49 L104,55 L130,42 L156,47 L182,33 L208,39 L234,30 L260,44 L286,36 L312,25 L338,31 L364,20 L390,26 L420,16 L420,88 L0,88 Z" fill="url(#cfill)"/>
+            <polyline points="0,64 26,58 52,66 78,49 104,55 130,42 156,47 182,33 208,39 234,30 260,44 286,36 312,25 338,31 364,20 390,26 420,16"
+                      fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/>
+          </svg>
+
+          <div class="clog">
+            <div><span class="ct">09:20</span> <span class="cok">ENTRY</span> short straddle opened</div>
+            <div><span class="ct">09:34</span> <span class="cok">HEDGE</span> protective leg added</div>
+            <div><span class="ct">13:15</span> <span class="cwarn">ADJUST</span> strike rolled up</div>
+            <div><span class="ct">15:10</span> <span class="cok">EXIT</span> squared off — flat</div>
+          </div>
+
+          <div class="console-foot">
+            <span class="cf">LOSS CAP</span>
+            <span class="cbar"><i></i></span>
+            <span class="cf carmed">KILL SWITCH ARMED</span>
+          </div>
+        </div>
+        <p class="console-cap">// illustrative system view — not a performance record</p>
       </div>
     </div>
   </div>
-  <span class="hero-scroll" aria-hidden="true">Scroll <span class="bar"></span></span>
+
+  <div class="hero-scroll" aria-hidden="true"><span class="bar"></span> scroll</div>
 </section>
 
-<!-- ============================ TECH MARQUEE ============================ -->
+<!-- ============================ VENUE MARQUEE ============================ -->
 <div class="marquee" aria-hidden="true">
   <div class="marquee-track">
-    <span class="marquee-item">Computer Vision</span>
-    <span class="marquee-item">Generative AI</span>
-    <span class="marquee-item">Agentic AI</span>
-    <span class="marquee-item">Model Context Protocol</span>
-    <span class="marquee-item">Machine Learning</span>
-    <span class="marquee-item">Data Science</span>
-    <span class="marquee-item">Python</span>
-    <span class="marquee-item">Program Management</span>
-    <span class="marquee-item">Agile / Scrum</span>
-    <span class="marquee-item">Decision Automation</span>
+    <span class="marquee-item">Fyers</span>
+    <span class="marquee-item">Zerodha</span>
+    <span class="marquee-item">Upstox</span>
+    <span class="marquee-item">Angel One</span>
+    <span class="marquee-item">Dhan</span>
+    <span class="marquee-item">Groww</span>
+    <span class="marquee-item">Kotak Neo</span>
+    <span class="marquee-item">Nirmal Bang</span>
+    <span class="marquee-item">Delta Exchange</span>
+    <span class="marquee-item">Deribit</span>
     <!-- duplicate set for a seamless loop -->
-    <span class="marquee-item">Computer Vision</span>
-    <span class="marquee-item">Generative AI</span>
-    <span class="marquee-item">Agentic AI</span>
-    <span class="marquee-item">Model Context Protocol</span>
-    <span class="marquee-item">Machine Learning</span>
-    <span class="marquee-item">Data Science</span>
-    <span class="marquee-item">Python</span>
-    <span class="marquee-item">Program Management</span>
-    <span class="marquee-item">Agile / Scrum</span>
-    <span class="marquee-item">Decision Automation</span>
+    <span class="marquee-item">Fyers</span>
+    <span class="marquee-item">Zerodha</span>
+    <span class="marquee-item">Upstox</span>
+    <span class="marquee-item">Angel One</span>
+    <span class="marquee-item">Dhan</span>
+    <span class="marquee-item">Groww</span>
+    <span class="marquee-item">Kotak Neo</span>
+    <span class="marquee-item">Nirmal Bang</span>
+    <span class="marquee-item">Delta Exchange</span>
+    <span class="marquee-item">Deribit</span>
   </div>
 </div>
 <div class="marquee marquee--rev" aria-hidden="true">
   <div class="marquee-track">
-    <span class="marquee-item">Python</span>
-    <span class="marquee-item">Deep Learning</span>
-    <span class="marquee-item">LLMs</span>
-    <span class="marquee-item">Predictive Modeling</span>
-    <span class="marquee-item">S&amp;OP</span>
-    <span class="marquee-item">Aera Decision Cloud</span>
-    <span class="marquee-item">Stakeholder Alignment</span>
-    <span class="marquee-item">Budgeting</span>
-    <span class="marquee-item">Pre-Sales</span>
-    <span class="marquee-item">Quality Control</span>
+    <span class="marquee-item">NIFTY</span>
+    <span class="marquee-item">BANKNIFTY</span>
+    <span class="marquee-item">FINNIFTY</span>
+    <span class="marquee-item">MIDCPNIFTY</span>
+    <span class="marquee-item">SENSEX</span>
+    <span class="marquee-item">BANKEX</span>
+    <span class="marquee-item">Perpetuals</span>
+    <span class="marquee-item">Implied Volatility</span>
+    <span class="marquee-item">Greeks</span>
+    <span class="marquee-item">Tick Replay</span>
     <!-- duplicate set for a seamless loop -->
-    <span class="marquee-item">Python</span>
-    <span class="marquee-item">Deep Learning</span>
-    <span class="marquee-item">LLMs</span>
-    <span class="marquee-item">Predictive Modeling</span>
-    <span class="marquee-item">S&amp;OP</span>
-    <span class="marquee-item">Aera Decision Cloud</span>
-    <span class="marquee-item">Stakeholder Alignment</span>
-    <span class="marquee-item">Budgeting</span>
-    <span class="marquee-item">Pre-Sales</span>
-    <span class="marquee-item">Quality Control</span>
+    <span class="marquee-item">NIFTY</span>
+    <span class="marquee-item">BANKNIFTY</span>
+    <span class="marquee-item">FINNIFTY</span>
+    <span class="marquee-item">MIDCPNIFTY</span>
+    <span class="marquee-item">SENSEX</span>
+    <span class="marquee-item">BANKEX</span>
+    <span class="marquee-item">Perpetuals</span>
+    <span class="marquee-item">Implied Volatility</span>
+    <span class="marquee-item">Greeks</span>
+    <span class="marquee-item">Tick Replay</span>
   </div>
 </div>
 
-<!-- ============================ ABOUT ============================ -->
-<section class="section section--alt" id="about">
-  <div class="wrap">
-    <div class="about-grid">
-      <div>
-        <div class="section-head" data-reveal>
-          <span class="eyebrow">About</span>
-          <h2 class="section-title">Strategy and execution, under one roof.</h2>
-        </div>
-        <div class="about-body">
-          <p data-reveal data-delay="1">
-            I sit where <strong>business strategy meets engineering reality</strong>. Over 7+ years
-            I've led cross-functional teams of data scientists, engineers and client stakeholders
-            to deliver AI initiatives that don't just demo well — they hold up in production and
-            move real metrics.
-          </p>
-          <p data-reveal data-delay="2">
-            My foundation is an <strong>MBA in Business Analytics</strong> from SCMHRD, Symbiosis,
-            built on a <strong>B.Tech in Electronics &amp; Instrumentation</strong> from NIT Agartala.
-            That mix lets me translate fuzzy business needs into clear technical roadmaps — and translate
-            technical trade-offs back into language executives can decide on.
-          </p>
-          <p data-reveal data-delay="3">
-            Today I work across <strong>computer vision, generative &amp; agentic AI, and intelligent
-            decision automation</strong> — from automated quality inspection to GenAI competitive
-            intelligence and AI-enabled supply &amp; operations planning.
-          </p>
-        </div>
-      </div>
-
-      <aside class="about-card" data-reveal data-delay="2">
-        <h4>At a glance</h4>
-        <div class="fact">
-          <span class="ico" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6 6 6-6 6"/></svg></span>
-          <div><div class="k">Currently</div><div class="v">Program Manager — AI &amp; Analytics</div></div>
-        </div>
-        <div class="fact">
-          <span class="ico" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6 6 6-6 6"/></svg></span>
-          <div><div class="k">Certification</div><div class="v">PMI — PMP</div></div>
-        </div>
-        <div class="fact">
-          <span class="ico" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6 6 6-6 6"/></svg></span>
-          <div><div class="k">Education</div><div class="v">MBA Business Analytics · B.Tech E&amp;I</div></div>
-        </div>
-        <div class="fact">
-          <span class="ico" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6 6 6-6 6"/></svg></span>
-          <div><div class="k">Based in</div><div class="v">Pune, India</div></div>
-        </div>
-        <div class="fact">
-          <span class="ico" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 6 6 6-6 6"/></svg></span>
-          <div><div class="k">Focus</div><div class="v">AI delivery · Program leadership</div></div>
-        </div>
-      </aside>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ EXPERTISE ============================ -->
-<section class="section" id="expertise">
+<!-- ============================ WHAT I BUILD ============================ -->
+<section class="section" id="build">
   <div class="wrap">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">Expertise</span>
-      <h2 class="section-title">What I bring to the table</h2>
-      <p class="section-lead">A blend of applied AI, data fluency and the program discipline to deliver it.</p>
+      <span class="eyebrow">Services</span>
+      <h2 class="section-title">What I build</h2>
+    </div>
+
+    <div class="chain" data-reveal>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2.3h6c0-1.1.4-1.8 1-2.3A7 7 0 0 0 12 2Z"/></svg></div>
+        <span>Strategy</span>
+      </div>
+      <svg class="chain-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
+        <span>Engine</span>
+      </div>
+      <svg class="chain-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v4M15 3v4M6 7h12l-1 5a5 5 0 0 1-10 0L6 7Z"/><path d="M10 16v2a2 2 0 0 0 4 0v-2"/></svg></div>
+        <span>Venues</span>
+      </div>
+      <svg class="chain-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <div class="chain-node">
+        <div class="chain-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <span>Monitoring</span>
+      </div>
     </div>
 
     <div class="cards">
-      <article class="card" data-reveal data-delay="1">
-        <div class="card-ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="12" r="3.2"/><path d="M3 9h2M19 9h2M3 15h2M19 15h2"/></svg>
-        </div>
-        <h3>AI &amp; Computer Vision</h3>
-        <p>Architecting and shipping vision systems for automated quality control — including label inspection reaching &gt;99% defect-detection accuracy.</p>
-        <div class="tags"><span class="tag">Computer Vision</span><span class="tag">Deep Learning</span><span class="tag">Quality Control</span></div>
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><circle cx="4" cy="13" r="2"/><circle cx="12" cy="10" r="2"/><circle cx="20" cy="14" r="2"/></svg></div>
+        <h3>Strategy automation</h3>
+        <p>Your rules, running unattended.</p>
+        <div class="tags"><span class="tag">state machines</span><span class="tag">order routing</span><span class="tag">re-entries</span><span class="tag">hedges</span><span class="tag">sizing</span></div>
       </article>
 
-      <article class="card" data-reveal data-delay="2">
-        <div class="card-ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a4 4 0 0 1 4 4 4 4 0 0 1 0 8 4 4 0 0 1-8 0 4 4 0 0 1 0-8 4 4 0 0 1 4-4Z"/><path d="M12 7v10"/></svg>
-        </div>
-        <h3>Generative &amp; Agentic AI</h3>
-        <p>Leading GenAI initiatives — from competitive-intelligence engines that read quarterly reports to agentic workflows using the Model Context Protocol.</p>
-        <div class="tags"><span class="tag">LLMs</span><span class="tag">Agentic AI</span><span class="tag">MCP</span></div>
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2v6.5L4.5 17a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L15 8.5V2"/><path d="M9 2h6M8 14h8"/></svg></div>
+        <h3>Backtesting &amp; validation</h3>
+        <p>Rule changes evaluated before they're traded.</p>
+        <div class="tags"><span class="tag">tick data</span><span class="tag">walk-forward</span><span class="tag">minute OHLC</span></div>
       </article>
 
-      <article class="card" data-reveal data-delay="3">
-        <div class="card-ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
-        </div>
-        <h3>Data Science &amp; Analytics</h3>
-        <p>Turning business questions into models and dashboards — predictive modeling, data mining and BI that leaders actually act on.</p>
-        <div class="tags"><span class="tag">Python</span><span class="tag">Predictive Modeling</span><span class="tag">Data Viz</span></div>
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v4M15 3v4M6 7h12l-1 5a5 5 0 0 1-10 0L6 7Z"/><path d="M10 16v2a2 2 0 0 0 4 0v-2"/></svg></div>
+        <h3>Broker &amp; API integration</h3>
+        <p>Ten venues, with the failure modes handled.</p>
+        <div class="tags"><span class="tag">websockets</span><span class="tag">reconciliation</span><span class="tag">rate limits</span><span class="tag">auth</span></div>
       </article>
 
-      <article class="card" data-reveal data-delay="1">
-        <div class="card-ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
-        </div>
-        <h3>Program &amp; Project Leadership</h3>
-        <p>PMP-certified delivery across Agile sprints, stakeholder alignment, budget control and risk management — end-to-end ownership.</p>
-        <div class="tags"><span class="tag">Agile / Scrum</span><span class="tag">Stakeholders</span><span class="tag">Budgeting</span></div>
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Monitoring &amp; controls</h3>
+        <p>What you want at 2:45pm on a bad day.</p>
+        <div class="tags"><span class="tag">kill switch</span><span class="tag">loss caps</span><span class="tag">square-off</span><span class="tag">alerting</span></div>
       </article>
 
-      <article class="card" data-reveal data-delay="2">
-        <div class="card-ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h13l5 5-5 5H3z"/><path d="M3 7v10"/></svg>
-        </div>
-        <h3>AI-Enabled Supply Chain</h3>
-        <p>Delivering intelligent S&amp;OP and demand-supply planning — decision automation on platforms like the Aera Decision Cloud for global enterprises.</p>
-        <div class="tags"><span class="tag">S&amp;OP</span><span class="tag">Decision Automation</span><span class="tag">Aera</span></div>
-      </article>
-
-      <article class="card" data-reveal data-delay="3">
-        <div class="card-ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/><circle cx="12" cy="12" r="3.2"/></svg>
-        </div>
-        <h3>Innovation &amp; Pre-Sales</h3>
-        <p>Spotting emerging tech and shaping it into solution proposals, demos and technical presentations that win confidence and new work.</p>
-        <div class="tags"><span class="tag">Solutioning</span><span class="tag">Pre-Sales</span><span class="tag">Strategy</span></div>
+      <article class="card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></div>
+        <h3>AI trading agents</h3>
+        <p>Agents that watch positions and escalate — instead of you watching a screen.</p>
+        <div class="tags"><span class="tag">LLM agents</span><span class="tag">agentic AI</span><span class="tag">MCP</span><span class="tag">anomaly detection</span></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ============================ PROCESS ============================ -->
-<section class="section section--alt" id="process">
+<!-- ============================ HOW I WORK ============================ -->
+<section class="section section--alt" id="how">
   <div class="wrap">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">Method</span>
-      <h2 class="section-title">How I take AI from idea to impact</h2>
-      <p class="section-lead">The same discipline on every program — tuned to each client's reality.</p>
+      <span class="eyebrow">Principles</span>
+      <h2 class="section-title">How I work</h2>
     </div>
-    <ol class="steps">
-      <li class="step" data-reveal data-delay="1">
-        <span class="step-no">01</span>
-        <h3>Frame the problem</h3>
-        <p>Anchor on the business metric that matters, map the stakeholders and define what "shipped" means — before any model is built.</p>
-      </li>
-      <li class="step" data-reveal data-delay="2">
-        <span class="step-no">02</span>
-        <h3>Prove value fast</h3>
-        <p>A tightly-scoped PoC with honest success criteria, so investment decisions are made on evidence rather than hype.</p>
-      </li>
-      <li class="step" data-reveal data-delay="3">
-        <span class="step-no">03</span>
-        <h3>Build for production</h3>
-        <p>Data pipelines, edge cases, governance and reliability handled early — not bolted on after the demo.</p>
-      </li>
-      <li class="step" data-reveal data-delay="4">
-        <span class="step-no">04</span>
-        <h3>Ship &amp; drive adoption</h3>
-        <p>Training, change management and clear ownership handoffs, so the system gets used — not just deployed.</p>
-      </li>
-      <li class="step" data-reveal data-delay="5">
-        <span class="step-no">05</span>
-        <h3>Scale &amp; measure</h3>
-        <p>Track the metric, tune the roadmap and expand to adjacent use cases once the ROI is proven.</p>
-      </li>
-    </ol>
+
+    <div class="flow" data-reveal>
+      <div class="flow-step">
+        <span class="flow-no">Stage 1</span>
+        <div class="flow-ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <h3>Replay</h3>
+        <p>Recorded market data, replayed deterministically. Every state tested on purpose — not just the ones that happened.</p>
+      </div>
+
+      <div class="flow-connector" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+
+      <div class="flow-step">
+        <span class="flow-no">Stage 2</span>
+        <div class="flow-ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+        </div>
+        <h3>Paper</h3>
+        <p>Live data, simulated orders. Production behaviour, no money at risk.</p>
+      </div>
+
+      <div class="flow-connector" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+
+      <div class="flow-step flow-step--live">
+        <span class="flow-no">Stage 3</span>
+        <div class="flow-ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.48M7.76 7.76a6 6 0 0 0 0 8.48M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        </div>
+        <h3>Live</h3>
+        <p>Reduced size, kill switch armed, staged ramp — with a rollback plan agreed before cutover.</p>
+      </div>
+    </div>
+
+    <p class="flow-note" data-reveal>
+      <strong>Evidence, not assurances.</strong> Every requirement traces to a test, and every test to a
+      recorded, inspectable result — at every stage above.
+    </p>
   </div>
 </section>
 
-<!-- ============================ WORK ============================ -->
-<section class="section" id="work">
+<!-- ============================ STAT BAND ============================ -->
+<div class="statband">
   <div class="wrap">
-    <div class="section-head" data-reveal>
-      <span class="eyebrow">Selected work</span>
-      <h2 class="section-title">Initiatives I've led</h2>
-      <p class="section-lead">A few representative programs — described by outcome and approach.</p>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text"><span data-count="10">10</span></div>
+      <div class="sl">Broker &amp; venue integrations</div>
+    </div>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text"><span data-count="6">6</span></div>
+      <div class="sl">Index derivatives covered</div>
+    </div>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text">24×7</div>
+      <div class="sl">Crypto markets, no session close</div>
+    </div>
+    <div class="statcell" data-reveal>
+      <div class="sn grad-text"><span data-count="7" data-suffix="+">7+</span></div>
+      <div class="sl">Years shipping production software</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ STACK ============================ -->
+<section class="section" id="stack">
+  <div class="wrap">
+    <div class="radar-split">
+      <div class="section-head" data-reveal style="margin-bottom:0">
+        <span class="eyebrow">Depth</span>
+        <h2 class="section-title">The ground I actually work on</h2>
+        <p class="section-lead">
+          Deepest in index options — that's the day job. But the execution machinery is
+          instrument-agnostic: if a market has an API and a feed, the same engineering applies.
+        </p>
+      </div>
+
+      <svg class="radar-svg" data-reveal viewBox="0 0 400 340" role="img" aria-label="Depth radar across F&O options, crypto, data, engineering, AI agents, and broker integrations">
+        <polygon points="200,50 303.9,110 303.9,230 200,290 96.1,230 96.1,110" fill="none" stroke="var(--line)"/>
+        <polygon points="200,90 269.3,130 269.3,210 200,250 130.7,210 130.7,130" fill="none" stroke="var(--line)"/>
+        <polygon points="200,130 234.6,150 234.6,190 200,210 165.4,190 165.4,150" fill="none" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="200" y2="50" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="303.9" y2="110" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="303.9" y2="230" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="200" y2="290" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="96.1" y2="230" stroke="var(--line)"/>
+        <line x1="200" y1="170" x2="96.1" y2="110" stroke="var(--line)"/>
+        <polygon points="200,56 283.14,122 293.53,224 200,278 114.79,219.2 108.55,117.2" fill="var(--accent)" fill-opacity=".18" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="200" cy="56" r="3" fill="var(--accent)"/>
+        <circle cx="283.14" cy="122" r="3" fill="var(--accent)"/>
+        <circle cx="293.53" cy="224" r="3" fill="var(--accent)"/>
+        <circle cx="200" cy="278" r="3" fill="var(--accent)"/>
+        <circle cx="114.79" cy="219.2" r="3" fill="var(--accent)"/>
+        <circle cx="108.55" cy="117.2" r="3" fill="var(--accent)"/>
+        <text x="200" y="20" text-anchor="middle">F&amp;O OPTIONS</text>
+        <text x="330" y="95" text-anchor="start">CRYPTO</text>
+        <text x="330" y="245" text-anchor="start">DATA</text>
+        <text x="200" y="320" text-anchor="middle">ENGINEERING</text>
+        <text x="70" y="245" text-anchor="end">AI/AGENTS</text>
+        <text x="70" y="95" text-anchor="end">BROKERS</text>
+      </svg>
     </div>
 
-    <div class="work-list">
-      <article class="work" data-reveal data-delay="1">
-        <span class="idx">01</span>
-        <div>
-          <span class="work-cat">Computer Vision</span>
-          <h3>Automated label inspection for a bottling plant</h3>
-          <p>Led delivery of an AI-driven computer-vision system that inspects labels in real time, replacing slow, error-prone manual checks and dramatically cutting inspection effort.</p>
+    <div class="stack-grid">
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Indian F&amp;O</h3>
+        <p>NSE + BSE index derivatives, weekly and monthly expiries.</p>
+        <div class="tags">
+          <span class="tag">NIFTY</span><span class="tag">BANKNIFTY</span><span class="tag">FINNIFTY</span>
+          <span class="tag">MIDCPNIFTY</span><span class="tag">SENSEX</span><span class="tag">BANKEX</span>
         </div>
-        <div class="metric"><div class="n grad-text"><span data-count="99" data-suffix="%">99%</span></div><div class="l">Defect accuracy</div></div>
-      </article>
+      </div>
 
-      <article class="work" data-reveal data-delay="2">
-        <span class="idx">02</span>
-        <div>
-          <span class="work-cat">Generative AI</span>
-          <h3>GenAI competitive-intelligence engine</h3>
-          <p>Built an initiative that ingests competitors' quarterly reports and auto-generates insights on financial performance, strategic moves and market positioning to guide executive decisions.</p>
-        </div>
-        <div class="metric"><div class="n grad-text">Exec</div><div class="l">Decision support</div></div>
-      </article>
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M8 9h5M8 15h5"/></svg></div>
+        <h3>Crypto derivatives</h3>
+        <p>Markets that never close.</p>
+        <div class="tags"><span class="tag">Delta Exchange</span><span class="tag">Deribit</span><span class="tag">perpetuals</span><span class="tag">funding rates</span></div>
+      </div>
 
-      <article class="work" data-reveal data-delay="3">
-        <span class="idx">03</span>
-        <div>
-          <span class="work-cat">Decision Automation</span>
-          <h3>AI-enabled S&amp;OP for a global automotive client</h3>
-          <p>Owned end-to-end delivery of an intelligent demand-supply planning solution on the Aera Decision Cloud, aligning business, supply-chain and IT stakeholders around automated decisions.</p>
-        </div>
-        <div class="metric"><div class="n grad-text">Global</div><div class="l">Enterprise scale</div></div>
-      </article>
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg></div>
+        <h3>Your market</h3>
+        <p>Only the venue adapter and contract maths change.</p>
+        <div class="tags"><span class="tag">equities</span><span class="tag">futures</span><span class="tag">commodities</span><span class="tag">FX</span></div>
+      </div>
 
-      <article class="work" data-reveal data-delay="4">
-        <span class="idx">04</span>
-        <div>
-          <span class="work-cat">Research</span>
-          <h3>Published research — Computer Vision for Corrective Packaging</h3>
-          <p>Authored a peer-reviewed paper, "Computer Vision Enabled for Corrective Packaging," published by World Scientific Publishing Company, Singapore.</p>
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4 3 20h18L12 4Z"/></svg></div>
+        <h3>Derivatives craft</h3>
+        <div class="tags">
+          <span class="tag">implied volatility</span><span class="tag">Greeks</span><span class="tag">straddles</span>
+          <span class="tag">strangles</span><span class="tag">time decay</span><span class="tag">expiry dynamics</span><span class="tag">vol regimes</span>
         </div>
-        <div class="metric"><div class="n grad-text">2024</div><div class="l">Published</div></div>
-      </article>
+      </div>
+
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></div>
+        <h3>Data</h3>
+        <p>Years of tick and minute OHLC across strikes and expiries.</p>
+      </div>
+
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4 3 12l5 8M16 4l5 8-5 8"/></svg></div>
+        <h3>Engineering</h3>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span>
+          <span class="tag">event-driven</span><span class="tag">replay harness</span><span class="tag">CI</span>
+        </div>
+      </div>
+
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></div>
+        <h3>AI &amp; agentic tooling</h3>
+        <div class="tags">
+          <span class="tag">LLM agents</span><span class="tag">MCP</span><span class="tag">regime classification</span><span class="tag">GenAI reporting</span>
+        </div>
+      </div>
+
+      <div class="stack-block card" data-reveal>
+        <div class="card-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg></div>
+        <h3>Also shipped</h3>
+        <p>
+          <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — live options analytics, built and run end to end.
+          <svg class="spark" width="56" height="20" viewBox="0 0 56 20" aria-hidden="true"><polyline points="0,16 8,12 16,14 24,6 32,9 40,3 48,7 56,2" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============================ ACHIEVEMENTS ============================ -->
-<section class="section section--alt" id="achievements">
+<!-- ============================ THE GAP ============================ -->
+<section class="section section--alt" id="gap">
   <div class="wrap">
     <div class="section-head" data-reveal>
-      <span class="eyebrow">Recognition</span>
-      <h2 class="section-title">Awards &amp; credentials</h2>
+      <span class="eyebrow">Why this is hard to hire for</span>
+      <h2 class="section-title">Two skills that rarely sit in one person</h2>
     </div>
-    <div class="ach-grid">
-      <article class="ach" data-reveal data-delay="1">
-        <div class="ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4"/></svg></div>
-        <h3>Published Researcher</h3>
-        <p>Peer-reviewed paper on computer vision for corrective packaging — World Scientific Publishing, Singapore.</p>
-      </article>
-      <article class="ach" data-reveal data-delay="2">
-        <div class="ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 3 2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9 2.6.9-5.5-4-3.9 5.5-.8z"/></svg></div>
-        <h3>Spot Awards</h3>
-        <p>Recognized at Bristlecone for exceptional contribution to AI-driven delivery.</p>
-      </article>
-      <article class="ach" data-reveal data-delay="3">
-        <div class="ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 21h8M12 17v4M6 4h12v4a6 6 0 0 1-12 0z"/><path d="M6 6H3v2a3 3 0 0 0 3 3M18 6h3v2a3 3 0 0 1-3 3"/></svg></div>
-        <h3>Customer Satisfaction Award</h3>
-        <p>Honored at Johnson Controls for delivery excellence and client relationships.</p>
-      </article>
-      <article class="ach" data-reveal data-delay="4">
-        <div class="ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 9 4-9 4-9-4z"/><path d="M3 10v4c0 2 4 4 9 4s9-2 9-4v-4"/></svg></div>
-        <h3>PMP Certified</h3>
-        <p>PMI Project Management Professional — a proven track record on complex initiatives.</p>
-      </article>
+
+    <div class="equation" data-reveal>
+      <div class="eq-side card">
+        <div class="card-ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        </div>
+        <h3>A developer alone</h3>
+        <p>Ships the happy path — and misses that a stalled feed still returns a price.</p>
+      </div>
+
+      <span class="eq-op" aria-hidden="true">+</span>
+
+      <div class="eq-side card">
+        <div class="card-ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        </div>
+        <h3>A trader alone</h3>
+        <p>Knows what the strategy should do, with no way to prove the code does it.</p>
+      </div>
+    </div>
+
+    <div class="eq-arrow" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+
+    <div class="eq-result card" data-reveal>
+      <div class="card-ico" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <h3>What I do</h3>
+      <p>Turn a strategy you already trade into a system that executes it exactly — and prove it does, over replayed historical ticks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BACKGROUND ============================ -->
+<section class="section" id="background">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">About me</span>
+      <h2 class="section-title">Market, code, and AI</h2>
+    </div>
+
+    <div class="venn-wrap" data-reveal>
+      <svg class="venn-svg" viewBox="0 0 400 320" role="img" aria-label="Three overlapping circles: Market, Code, and AI, intersecting on AI trading agents">
+        <circle cx="155" cy="140" r="105" fill="var(--accent)" fill-opacity=".16" stroke="var(--accent-line)"/>
+        <circle cx="245" cy="140" r="105" fill="var(--accent-2)" fill-opacity=".16" stroke="var(--accent-line)"/>
+        <circle cx="200" cy="222" r="105" fill="var(--accent-3)" fill-opacity=".16" stroke="var(--accent-line)"/>
+        <text x="88" y="80" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="1" fill="var(--text)">MARKET</text>
+        <text x="312" y="80" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="1" fill="var(--text)">CODE</text>
+        <text x="200" y="305" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="1" fill="var(--text)">AI</text>
+        <text x="200" y="170" text-anchor="middle" font-family="var(--font-display)" font-weight="700" font-size="15" fill="var(--text)">
+          <tspan x="200" dy="0">AI trading</tspan>
+          <tspan x="200" dy="18">agents</tspan>
+        </text>
+      </svg>
+      <div class="venn-captions">
+        <div class="venn-cap" data-reveal>
+          <span class="dot" style="background:var(--accent)"></span>
+          <div><h3>Market</h3><p>Indian index F&amp;O, crypto derivatives, and <a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — live options analytics I built and run.</p></div>
+        </div>
+        <div class="venn-cap" data-reveal>
+          <span class="dot" style="background:var(--accent-2)"></span>
+          <div><h3>Code</h3><p>7+ years shipping production software — Python, FastAPI, event-driven systems, real CI.</p></div>
+        </div>
+        <div class="venn-cap" data-reveal>
+          <span class="dot" style="background:var(--accent-3)"></span>
+          <div><h3>AI</h3><p>Generative &amp; agentic AI in production — LLM agents, MCP, computer vision.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="honest" data-reveal>
+      <p><strong>Some things I won't tell you, on principle.</strong></p>
+      <p>
+        I don't publish returns, win rates, or performance figures — mine or a client's. I build
+        and validate execution systems; I don't sell strategies, tips, or advisory, and I'm not
+        a SEBI-registered adviser or a registered adviser in any other jurisdiction. Any strategy
+        I automate is one you already have and already believe in.
+      </p>
+      <p>
+        Automated trading carries real risk, including of loss beyond expectation. A well-built
+        system executes your decisions faithfully and quickly — it does not make them correct.
+      </p>
     </div>
   </div>
 </section>
 
 <!-- ============================ CONTACT ============================ -->
-<section class="section contact" id="contact">
+<section class="section section--alt contact" id="contact">
   <div class="wrap">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Get in touch</span>
+      <h2 class="section-title">Tell me what you trade</h2>
+      <p class="section-lead">
+        Describe the strategy you already run manually — I'll tell you honestly whether
+        it's a good fit to automate.
+      </p>
+    </div>
+
     <div class="contact-card" data-reveal>
-      <span class="eyebrow" style="justify-content:center">Get in touch</span>
-      <h2 class="grad-text animate-grad">Let's build something intelligent.</h2>
-      <p>Open to conversations about AI program leadership, consulting and collaboration. The fastest way to reach me is email or LinkedIn.</p>
       <div class="contact-actions">
-        <a class="btn btn--primary magnetic" href="mailto:{{ site.social.email }}">Email me <span class="arrow">→</span></a>
-        <a class="btn btn--ghost" href="{{ site.social.linkedin }}" target="_blank" rel="noopener">Connect on LinkedIn</a>
+        <a href="mailto:{{ site.social.email }}?subject=Algo%20automation%20enquiry" class="btn btn--primary magnetic">Email me</a>
+        <a href="{{ site.social.linkedin }}" class="btn btn--ghost" target="_blank" rel="noopener">LinkedIn</a>
       </div>
-      <button class="copy-email" type="button" data-copy="{{ site.social.email }}" aria-label="Copy email address">
-        <span class="ce-text">{{ site.social.email }}</span>
-        <svg class="ico-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        <span class="ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg> Copied to clipboard</span>
-      </button>
-      <div class="socials">
-        <a href="{{ site.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-        </a>
-        <a href="{{ site.social.github }}" target="_blank" rel="noopener" aria-label="GitHub">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-        </a>
-        <a href="mailto:{{ site.social.email }}" aria-label="Email">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        </a>
+      <div class="tags" style="margin-top:1.4rem">
+        <span class="tag">NDA before any strategy detail</span>
+        <span class="tag">Fixed scope, agreed up front</span>
+        <span class="tag">Support terms in writing</span>
       </div>
     </div>
   </div>

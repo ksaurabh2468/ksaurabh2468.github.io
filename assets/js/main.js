@@ -402,8 +402,11 @@
   if (cmdk) {
     const body = document.body;
     const email = body.dataset.email || "";
-    const onHome = !!document.getElementById("about");
-    const go = (hash) => (onHome ? hash : "/" + hash); // from blog pages, jump home first
+    // the trading landing page is "/", the profile page is "/about/"
+    const onHome = !!document.getElementById("build");
+    const onProfile = !!document.getElementById("expertise");
+    const go = (hash) => (onHome ? hash : "/" + hash); // jump to the landing page first
+    const prof = (hash) => (onProfile ? hash : "/about/" + hash);
     const ICONS = {
       section: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4 8 20M16 4l-2 16M4 9h17M3 15h17"/></svg>',
       page: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
@@ -412,12 +415,15 @@
     };
     const items = [
       { label: "Home", k: "Go", icon: ICONS.section, run: () => (location.href = go("#top")) },
-      { label: "About", k: "Go", icon: ICONS.section, run: () => (location.href = go("#about")) },
-      { label: "Expertise", k: "Go", icon: ICONS.section, run: () => (location.href = go("#expertise")) },
-      { label: "How I deliver", k: "Go", icon: ICONS.section, run: () => (location.href = go("#process")) },
-      { label: "Selected work", k: "Go", icon: ICONS.section, run: () => (location.href = go("#work")) },
-      { label: "Awards & credentials", k: "Go", icon: ICONS.section, run: () => (location.href = go("#achievements")) },
-      { label: "Contact", k: "Go", icon: ICONS.section, run: () => (location.href = go("#contact")) },
+      { label: "What I build", k: "Go", icon: ICONS.section, run: () => (location.href = go("#build")) },
+      { label: "How I work", k: "Go", icon: ICONS.section, run: () => (location.href = go("#how")) },
+      { label: "Depth & stack", k: "Go", icon: ICONS.section, run: () => (location.href = go("#stack")) },
+      { label: "Work with me", k: "Go", icon: ICONS.section, run: () => (location.href = go("#contact")) },
+      { label: "About me", k: "Page", icon: ICONS.page, run: () => (location.href = prof("#about")) },
+      { label: "Expertise", k: "Page", icon: ICONS.page, run: () => (location.href = prof("#expertise")) },
+      { label: "How I deliver", k: "Page", icon: ICONS.page, run: () => (location.href = prof("#process")) },
+      { label: "Selected work", k: "Page", icon: ICONS.page, run: () => (location.href = prof("#work")) },
+      { label: "Awards & credentials", k: "Page", icon: ICONS.page, run: () => (location.href = prof("#achievements")) },
       { label: "Blog", k: "Page", icon: ICONS.page, run: () => (location.href = "/blog/") },
       { label: "Copy email address", k: "Action", icon: ICONS.copy, run: () => { if (navigator.clipboard) navigator.clipboard.writeText(email); } },
       { label: "Email me", k: "Action", icon: ICONS.ext, run: () => (location.href = "mailto:" + email) },

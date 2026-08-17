@@ -32,11 +32,11 @@ social:
 
 # ---- Primary navigation (label + anchor/path) ----
 nav:
-  - { label: "Home",      url: "/#top" }
-  - { label: "About",     url: "/#about" }
-  - { label: "Expertise", url: "/#expertise" }
-  - { label: "Work",      url: "/#work" }
-  - { label: "Blog",      url: "/blog/" }
+  - { label: "Home",        url: "/#top" }
+  - { label: "Services",    url: "/#build" }
+  - { label: "How I work",  url: "/#how" }
+  - { label: "About",       url: "/about/" }
+  - { label: "Blog",        url: "/blog/" }
 
 # ---- Build settings ----
 markdown: kramdown
