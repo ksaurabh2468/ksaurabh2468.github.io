@@ -17,7 +17,11 @@
 
   <title>{% if page.url == '/' %}{{ site.title }} — {{ page.tagline | default: site.tagline }}{% elsif page.title %}{{ page.title }} · {{ site.title }}{% else %}{{ site.title }} — {{ site.tagline }}{% endif %}</title>
 
-  {% seo %}
+  {% comment %}
+    title=false: this layout emits its own <title> above. Without it,
+    jekyll-seo-tag adds a second one and the page ships two title elements.
+  {% endcomment %}
+  {% seo title=false %}
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
