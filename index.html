@@ -93,7 +93,7 @@ description: >-
 
   /* -- Stat band: big numbers, fast absorption -- */
   .statband { border-block: 1px solid var(--line); background: var(--bg-2); }
-  .statband .wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .statband .wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); }
   .statcell { padding: clamp(1.6rem, 3.5vw, 2.6rem) 1.2rem; border-left: 1px solid var(--line); }
   .statcell:first-child { border-left: none; }
   .statcell .sn {
@@ -160,7 +160,7 @@ description: >-
   }
 
   /* -- Stack grid -- */
-  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 1.2rem; margin-top: 1.8rem; }
   .stack-block { border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; background: var(--surface); }
   .stack-block h3 {
     font-family: var(--font-mono); font-size: .76rem; letter-spacing: .12em;

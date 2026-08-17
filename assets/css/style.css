@@ -274,7 +274,7 @@ html { scrollbar-color: #1d2536 var(--bg); scrollbar-width: thin; }
 /* ============================================================
    EXPERTISE / CARDS
    ============================================================ */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; perspective: 1200px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 1.2rem; perspective: 1200px; }
 .card {
   position: relative; background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); padding: 1.8rem; overflow: hidden;
@@ -359,7 +359,7 @@ html { scrollbar-color: #1d2536 var(--bg); scrollbar-width: thin; }
 /* ============================================================
    ACHIEVEMENTS
    ============================================================ */
-.ach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+.ach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 1.2rem; }
 .ach { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; transition: transform var(--t), border-color var(--t); }
 .ach:hover { transform: translateY(-5px); border-color: var(--accent-line); }
 .ach .ico { color: var(--accent); margin-bottom: 1rem; }
@@ -391,7 +391,7 @@ html { scrollbar-color: #1d2536 var(--bg); scrollbar-width: thin; }
 /* ============================================================
    BLOG
    ============================================================ */
-.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.4rem; }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 1.4rem; }
 .post-card {
   display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); overflow: hidden; transition: transform var(--t), border-color var(--t); height: 100%;
