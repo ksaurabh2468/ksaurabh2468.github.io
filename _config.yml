@@ -52,11 +52,15 @@ collections:
     output: true
     permalink: /work/:name/
 
+# ---- Link previews (LinkedIn, WhatsApp, X): jekyll-seo-tag reads these ----
+twitter:
+  card: summary_large_image
+
 defaults:
   - scope: { path: "", type: "pages" }
-    values: { layout: "default" }
+    values: { layout: "default", image: /assets/og-card.png }
   - scope: { path: "_posts", type: "posts" }
-    values: { layout: "post" }
+    values: { layout: "post", image: /assets/og-card.png }
 
 exclude:
   - Gemfile
