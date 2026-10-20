@@ -7,6 +7,8 @@
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isTouch = window.matchMedia("(hover: none)").matches;
+  // phones get their own markup (.v-phone); the desktop hero, its canvas and the intro loader stay off there
+  const isPhone = window.matchMedia("(max-width: 767px)").matches;
   const $ = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
 
@@ -208,7 +210,7 @@
 
   /* ---------- Hero particle / constellation canvas ---------- */
   const canvas = $(".hero-canvas");
-  if (canvas && !reduced) {
+  if (canvas && !reduced && !isPhone) {
     const ctx = canvas.getContext("2d");
     let w, h, dpr, particles, raf;
     const COUNT = () => Math.min(90, Math.floor((window.innerWidth * window.innerHeight) / 16000));
@@ -276,7 +278,7 @@
   /* ---------- Preloader (once per session) ---------- */
   const pre = $(".preloader");
   const revisit = document.documentElement.classList.contains("revisit");
-  if (pre && !revisit && !reduced) {
+  if (pre && !revisit && !reduced && !isPhone) {
     document.body.classList.add("is-loading");
     const num = $(".pre-count", pre);
     const t0 = performance.now(), dur = 950;

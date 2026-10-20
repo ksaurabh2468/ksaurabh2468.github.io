@@ -1,0 +1,151 @@
+<!-- ============ PHONE HOME (below 768px; the desktop markup above is hidden there) ============
+     Same copy as the desktop page, phone structure: hero + stage pill + stats, services as a swipe carousel
+     (shared card art from _includes/art-*.html, plays once), process stepper, market chips, the gap as one card,
+     background, a folded honesty note and the contact card. IDs are p-* so they never clash with desktop IDs;
+     assets/js/phone.js maps the desktop anchors (#build, #how, #contact ...) to these on phones. -->
+
+<section class="p-hero" id="p-top">
+  <span class="p-chip"><span class="p-dot"></span>Algorithmic trading systems &amp; AI agents</span>
+  <h1 class="p-h1">Your strategy.<span class="p-grad">Built to run itself.</span></h1>
+  <p class="p-lead">Production trading systems and <strong>AI trading agents</strong> — index F&amp;O, equities, crypto derivatives, or whatever you trade.</p>
+
+  <div class="p-stage" aria-hidden="true">
+    <span class="s s1"><i></i>BACKTEST</span><span class="s s2"><i></i>PAPER</span><span class="s s3"><i></i>LIVE</span>
+  </div>
+
+  <div class="p-ctas">
+    <a href="#p-contact" class="p-btn p-btn--primary">Work with me <span aria-hidden="true">→</span></a>
+    <a href="#p-how" class="p-btn p-btn--ghost">How I work</a>
+  </div>
+
+  <div class="p-stats">
+    <div><b>10</b><span>Broker &amp; venue integrations</span></div>
+    <div><b>6</b><span>Index derivatives covered</span></div>
+    <div><b>24×7</b><span>Crypto markets, no session close</span></div>
+    <div><b>7+</b><span>Years shipping production software</span></div>
+  </div>
+</section>
+
+<section class="p-sec" id="p-build">
+  <div class="p-head">
+    <span class="p-eyebrow">Services</span>
+    <h2>What I build</h2>
+  </div>
+  <div class="p-swipe" data-swipe aria-label="Services, swipe sideways">
+    <article class="p-card" data-reveal>
+      {% include art-strategy.html %}
+      <h3>Strategy automation</h3>
+      <p>Your rules, running unattended.</p>
+      <div class="p-tags"><span>state machines</span><span>order routing</span><span>re-entries</span><span>sizing</span><span>risk rules</span></div>
+    </article>
+    <article class="p-card" data-reveal>
+      {% include art-backtest.html %}
+      <h3>Backtesting as a service</h3>
+      <p>Tell me the rules; I run the backtests and share detailed reports, trade by trade.</p>
+      <div class="p-tags"><span>tick data</span><span>minute OHLC</span><span>variations compared</span><span>reports</span></div>
+    </article>
+    <article class="p-card" data-reveal>
+      {% include art-broker.html %}
+      <h3>Broker &amp; API integration</h3>
+      <p>Ten venues, with the failure modes handled.</p>
+      <div class="p-tags"><span>websockets</span><span>reconciliation</span><span>rate limits</span><span>auth</span></div>
+    </article>
+    <article class="p-card" data-reveal>
+      {% include art-monitoring.html %}
+      <h3>Monitoring &amp; controls</h3>
+      <p>What you want at 2:45pm on a bad day.</p>
+      <div class="p-tags"><span>exit-all switch</span><span>stop-losses</span><span>square-off</span><span>alerting</span></div>
+    </article>
+    <article class="p-card" data-reveal>
+      {% include art-agents.html %}
+      <h3>AI trading agents</h3>
+      <p>Agents that watch positions and escalate — instead of you watching a screen.</p>
+      <div class="p-tags"><span>LLM agents</span><span>agentic AI</span><span>MCP</span><span>anomaly detection</span></div>
+    </article>
+    <article class="p-card" data-reveal>
+      {% include art-deploy.html %}
+      <h3>Deployment &amp; support</h3>
+      <p>Your algo on its own private cloud server, kept running for the support period we agree.</p>
+      <div class="p-tags"><span>private cloud server</span><span>paper → live</span><span>exchange &amp; API changes</span></div>
+    </article>
+  </div>
+  <div class="p-dots" data-dots aria-hidden="true"></div>
+</section>
+
+<section class="p-sec" id="p-how">
+  <div class="p-head">
+    <span class="p-eyebrow">Principles</span>
+    <h2>How I work</h2>
+  </div>
+  <ol class="p-steps">
+    <li data-reveal><span class="n">1</span><div><h3>Replay</h3><p>Recorded market data, replayed deterministically. Every state tested on purpose — not just the ones that happened.</p></div></li>
+    <li data-reveal><span class="n">2</span><div><h3>Paper</h3><p>Live data, simulated orders. Production behaviour, no money at risk.</p></div></li>
+    <li data-reveal class="live"><span class="n">3</span><div><h3>Live</h3><p>Reduced size, exit-all switch ready, staged ramp — with a rollback plan agreed before cutover.</p></div></li>
+  </ol>
+  <p class="p-note"><strong>Evidence, not assurances.</strong> Every requirement traces to a test, and every test to a recorded, inspectable result.</p>
+</section>
+
+<section class="p-sec" id="p-stack">
+  <div class="p-head">
+    <span class="p-eyebrow">Depth</span>
+    <h2>The ground I actually work on</h2>
+    <p>Deepest in index options — that's the day job. If a market has an API and a feed, the same engineering applies.</p>
+  </div>
+  <div class="p-swipe p-swipe--sm" aria-label="Markets, swipe sideways">
+    <article class="p-mini"><h3>Indian F&amp;O</h3><p>NSE + BSE index derivatives, weekly and monthly expiries.</p><div class="p-tags"><span>NIFTY</span><span>BANKNIFTY</span><span>SENSEX</span><span>+3</span></div></article>
+    <article class="p-mini"><h3>Crypto derivatives</h3><p>Markets that never close.</p><div class="p-tags"><span>Delta Exchange</span><span>Deribit</span><span>perpetuals</span></div></article>
+    <article class="p-mini"><h3>MCX commodities</h3><p>Different session hours, different lot maths.</p><div class="p-tags"><span>crude oil</span><span>natural gas</span><span>gold</span><span>silver</span></div></article>
+    <article class="p-mini"><h3>Your market</h3><p>Only the venue adapter and contract maths change.</p><div class="p-tags"><span>equities</span><span>futures</span><span>FX</span></div></article>
+  </div>
+  <ul class="p-list" data-reveal>
+    <li><b>Derivatives craft</b><span>implied volatility · Greeks · straddles · strangles · time decay · expiry dynamics</span></li>
+    <li><b>Data</b><span>Years of tick and minute OHLC across strikes and expiries.</span></li>
+    <li><b>Engineering</b><span>Python · FastAPI · PostgreSQL · event-driven · replay harness · CI</span></li>
+    <li><b>AI &amp; agentic tooling</b><span>LLM agents · MCP · regime classification · GenAI reporting</span></li>
+    <li><b>Also shipped</b><span><a href="https://trendingiv.com" target="_blank" rel="noopener">TrendingIV</a> — live options analytics, built and run end to end.</span></li>
+  </ul>
+</section>
+
+<section class="p-sec">
+  <div class="p-head">
+    <span class="p-eyebrow">Why this is hard to hire for</span>
+    <h2>Two skills that rarely sit in one person</h2>
+  </div>
+  <div class="p-eq" data-reveal>
+    <div><h3>A developer alone</h3><p>Ships the happy path — and misses that a stalled feed still returns a price.</p></div>
+    <span class="op">+</span>
+    <div><h3>A trader alone</h3><p>Knows what the strategy should do, with no way to prove the code does it.</p></div>
+    <span class="op">=</span>
+    <div class="res"><h3>What I do</h3><p>Turn a strategy you already trade into a system that executes it exactly — and prove it does, over replayed historical ticks.</p></div>
+  </div>
+</section>
+
+<section class="p-sec">
+  <div class="p-head">
+    <span class="p-eyebrow">About me</span>
+    <h2>Market, code, and AI</h2>
+  </div>
+  <ul class="p-list" data-reveal>
+    <li><b>Market</b><span>Indian index F&amp;O, crypto derivatives, and TrendingIV — live options analytics I built and run.</span></li>
+    <li><b>Code</b><span>7+ years shipping production software — Python, FastAPI, event-driven systems, real CI.</span></li>
+    <li><b>AI</b><span>Generative &amp; agentic AI in production — LLM agents, MCP, computer vision.</span></li>
+  </ul>
+  <a class="p-link" href="{{ '/about/' | relative_url }}">More about me <span aria-hidden="true">→</span></a>
+
+  <details class="p-fold">
+    <summary>Some things I won't tell you, on principle</summary>
+    <p>I don't publish returns, win rates, or performance figures — mine or a client's. I build and validate execution systems; I don't sell strategies, tips, or advisory, and I'm not a SEBI-registered adviser or a registered adviser in any other jurisdiction. Any strategy I automate is one you already have and already believe in.</p>
+    <p>Automated trading carries real risk, including of loss beyond expectation. A well-built system executes your decisions faithfully and quickly — it does not make them correct.</p>
+  </details>
+</section>
+
+<section class="p-sec" id="p-contact">
+  <div class="p-cta" data-reveal>
+    <span class="p-eyebrow">Get in touch</span>
+    <h2>Tell me what you trade</h2>
+    <p>Describe the strategy you already run manually — I'll tell you honestly whether it's a good fit to automate.</p>
+    <a href="mailto:{{ site.social.email }}?subject=Algo%20automation%20enquiry" class="p-btn p-btn--primary">Email me <span aria-hidden="true">→</span></a>
+    <a href="{{ site.social.linkedin }}" class="p-btn p-btn--ghost" target="_blank" rel="noopener">LinkedIn</a>
+    <div class="p-tags p-tags--c"><span>Your strategy stays confidential</span><span>Tested before it trades</span><span>Support terms in writing</span></div>
+  </div>
+</section>
